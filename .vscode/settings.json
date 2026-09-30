@@ -1,0 +1,15 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[astro]": { "editor.defaultFormatter": "astro-build.astro-vscode" },
+  "prettier.documentSelectors": ["**/*.astro"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": { "**/.astro": true, "**/dist": true },
+  "search.exclude": { "**/node_modules": true, "**/dist": true, "**/.astro": true },
+  "files.associations": { "release.md": "markdown" },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "package.json": "package-lock.json, .nvmrc, .prettierrc, .editorconfig",
+    "README.md": "LICENSE, MUSIC-LICENSE.md"
+  }
+}

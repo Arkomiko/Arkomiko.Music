@@ -1,0 +1,137 @@
+---
+import '@fontsource-variable/unbounded';
+import '@fontsource-variable/onest';
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Player from '../components/Player.vue';
+import { site } from '../site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  accent?: string;
+  image?: string;
+}
+
+const { title, description = site.description, accent, image } = Astro.props;
+const fullTitle = title ? `${title} | ${site.name}` : site.name;
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/releases', label: 'Релизы' },
+  { href: '/demos', label: 'Демки' },
+  { href: '/covers', label: 'Обложки' },
+  { href: '/about', label: 'Обо мне' },
+];
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <ClientRouter />
+  </head>
+  <body style={accent ? `--accent: ${accent}` : undefined}>
+    <header class="site-header wrap">
+      <a href="/" class="logo">
+        {site.name}
+      </a>
+      <nav aria-label="Основное меню">
+        <ul>
+          {nav.map((n) => (
+            <li>
+              <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>
+                {n.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer wrap">
+      <ul class="socials">
+        {site.socials.map((s) => (
+          <li>
+            <a href={s.url} rel="me noopener" target="_blank">
+              {s.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="muted">
+        © {new Date().getFullYear()} {site.name}
+      </p>
+    </footer>
+
+    <Player client:load transition:persist="player" />
+  </body>
+</html>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    padding-block: 1.5rem;
+  }
+  .logo {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.35rem;
+    text-decoration: none;
+  }
+  nav ul,
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  nav a {
+    text-decoration: none;
+    color: var(--muted);
+    padding-block: 0.25rem;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover {
+    color: var(--text);
+  }
+  nav a[aria-current='page'] {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+  .site-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 6rem;
+    padding-block: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  .socials a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .socials a:hover {
+    color: var(--text);
+  }
+  .site-footer p {
+    margin: 0;
+  }
+</style>

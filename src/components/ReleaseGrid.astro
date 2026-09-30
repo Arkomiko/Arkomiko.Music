@@ -1,0 +1,28 @@
+---
+import ReleaseCard from './ReleaseCard.astro';
+import type { Item } from '../lib/media';
+
+interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+---
+
+<ul class="grid">
+  {items.map((item) => (
+    <li>
+      <ReleaseCard item={item} />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2.5rem 1.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

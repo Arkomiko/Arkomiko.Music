@@ -1,0 +1,47 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Сайт: dev-сервер",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "preLaunchTask": "install (если нужно)",
+      "serverReadyAction": {
+        "pattern": "Local\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    },
+    {
+      "name": "Сайт: dev-сервер в сети (телефон)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev -- --host",
+      "preLaunchTask": "install (если нужно)",
+      "serverReadyAction": {
+        "pattern": "Local\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    },
+    {
+      "name": "Сайт: собрать и посмотреть",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run build && npm run preview",
+      "preLaunchTask": "install (если нужно)",
+      "serverReadyAction": {
+        "pattern": "Local\\s+(https?://\\S+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    },
+    {
+      "name": "Проверка: astro check",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run check"
+    }
+  ]
+}

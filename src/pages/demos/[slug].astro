@@ -1,0 +1,20 @@
+---
+import ReleaseView from '../../components/ReleaseView.astro';
+import { getItems } from '../../lib/media';
+
+export async function getStaticPaths() {
+  const demos = await getItems('demos');
+  const releases = await getItems('releases');
+  return demos.map((item) => {
+    const target = 'released_as' in item.entry.data ? item.entry.data.released_as : undefined;
+    return {
+      params: { slug: item.id },
+      props: { item, releasedAs: releases.find((r) => r.id === target) },
+    };
+  });
+}
+
+const { item, releasedAs } = Astro.props;
+---
+
+<ReleaseView item={item} releasedAs={releasedAs} />

@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { getItems } from '../lib/media';
+
+const all = [...(await getItems('releases')), ...(await getItems('demos'))]
+  .filter((i) => i.cover)
+  .sort((a, b) => b.date.getTime() - a.date.getTime());
+---
+
+<Base title="Обложки" description="Обложки релизов и демок Arkomiko.">
+  <div class="wrap">
+    <h1 class="page-title">Обложки</h1>
+    <ul class="covers">
+      {all.map((i) => (
+        <li>
+          <a href={i.href} style={`--accent: ${i.accent}`}>
+            <Image src={i.cover!} alt={`Обложка: ${i.title}`} width={720} height={720} />
+            <span>{i.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .covers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  a {
+    position: relative;
+    display: block;
+    text-decoration: none;
+  }
+  a :global(img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  span {
+    display: block;
+    margin-top: 0.6rem;
+    color: var(--muted);
+  }
+  a:hover span {
+    color: var(--accent);
+  }
+</style>

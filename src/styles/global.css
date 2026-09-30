@@ -1,0 +1,130 @@
+/* Токены. Меняешь здесь — меняется весь сайт. */
+:root {
+  --bg: #181b24;
+  --surface: #20242f;
+  --line: #333a4a;
+  --text: #eceef3;
+  --muted: #9aa1b4;
+  --accent: #9cc3ff; /* на страницах релизов подменяется цветом обложки */
+
+  --display: 'Unbounded Variable', 'Arial Black', system-ui, sans-serif;
+  --body: 'Onest Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --wrap: 1180px;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --player-h: 76px;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  padding-bottom: calc(var(--player-h) + 2rem);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--wrap));
+  margin-inline: auto;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Заголовки. Крупные названия релизов — главный визуальный элемент сайта. */
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.release-title {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  font-size: clamp(2.2rem, 6.5vw, 5.2rem);
+  overflow-wrap: anywhere;
+}
+
+.page-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  margin: 2rem 0;
+}
+
+.section-title {
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* Текст из release.md */
+.prose {
+  max-width: 64ch;
+}
+.prose p {
+  margin: 0 0 1em;
+}
+.prose a {
+  color: var(--accent);
+}
+
+@media (max-width: 760px) {
+  :root {
+    --player-h: 110px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
