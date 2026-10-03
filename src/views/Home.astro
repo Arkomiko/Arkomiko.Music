@@ -1,0 +1,143 @@
+---
+// Главная: «Об авторе», «Последние релизы», «Треки».
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import ReleaseGrid from '../components/ReleaseGrid.astro';
+import TrackTable from '../components/TrackTable.vue';
+import EmptyState from '../components/EmptyState.astro';
+import { getCatalog, getLibrary, getPacks } from '../lib/media';
+import { localize, useT, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+
+const items = await getCatalog();
+const packs = await getPacks();
+const library = await getLibrary();
+---
+
+<Base lang={lang} active="home">
+  <section id="about" class="container hero">
+    <div class="hero-text">
+      <div class="eyebrow">{t('home.eyebrow')}</div>
+      <h1 class="logo-name hero-name">Arkomiko</h1>
+      <p class="lead">{t('home.lead')}</p>
+      <p class="text-soft desktop-only">{t('home.text')}</p>
+      <p class="text-soft mobile-only">{t('home.textShort')}</p>
+      <div class="hero-actions">
+        <a href={localize('/about', lang)} class="btn btn-outline">
+          {t('home.more')}
+        </a>
+        <a href={localize('/music', lang)} class="btn btn-primary">
+          {t('home.library')}
+        </a>
+      </div>
+    </div>
+    <Logo variant="line" size={480} label={t('logo.alt')} class="hero-logo" />
+  </section>
+
+  <section id="releases" class="section">
+    <div class="container block">
+      <ReleaseGrid lang={lang} items={items} packs={packs} />
+    </div>
+  </section>
+
+  <section id="tracks" class="section">
+    <div class="container block">
+      {library.length ? (
+        <TrackTable
+          client:load
+          tracks={library}
+          lang={lang}
+          title={t('home.tracks')}
+          limit={6}
+          seeAllHref={localize('/music', lang)}
+        />
+      ) : (
+        <EmptyState lang={lang} kind="tracks" as="h2" />
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 72px;
+    padding-block: 80px;
+  }
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .hero-name {
+    font-size: 128px;
+  }
+  .hero-text p {
+    max-width: 640px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .hero :global(.hero-logo) {
+    flex-shrink: 0;
+    width: clamp(260px, 33vw, 480px);
+    height: auto;
+    color: var(--text);
+  }
+  .mobile-only {
+    display: none;
+  }
+  .block {
+    padding-block: 56px 72px;
+  }
+
+  @media (max-width: 1199px) {
+    .hero-name {
+      font-size: 104px;
+    }
+  }
+  @media (max-width: 767px) {
+    .hero {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding-block: 25px 32px;
+    }
+    .hero-text {
+      gap: 16px;
+    }
+    .hero-name {
+      font-size: 56px;
+      line-height: 0.95;
+    }
+    .desktop-only,
+    .hero :global(.hero-logo) {
+      display: none;
+    }
+    .mobile-only {
+      display: block;
+    }
+    .hero-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 5px;
+    }
+    .hero-actions .btn {
+      padding: 0 11px;
+    }
+    .block {
+      padding-block: 22px 28px;
+    }
+  }
+</style>

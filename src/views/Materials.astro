@@ -1,0 +1,332 @@
+---
+// «Материалы»: паки из contents_user/pack/<Semples|Presets|Projects|Collection>/ с фильтром по типу.
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import PlayButton from '../components/PlayButton.vue';
+import { coverOf, getPacks, packCategories } from '../lib/media';
+import { site } from '../site.config';
+import { localize, useT, type Lang } from '../i18n';
+import type { PlayerTrack } from '../stores/player';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+
+const packs = await Promise.all(
+  (await getPacks()).map(async (p) => {
+    const d = p.entry.data;
+    const cover = coverOf(p, lang);
+    const thumb = (await getImage({ src: p.covers.plain, width: 112, height: 112 })).src;
+    const large = (await getImage({ src: p.covers.plain, width: 720, height: 720 })).src;
+    const preview: PlayerTrack[] = p.preview
+      ? [
+          {
+            id: '',
+            src: p.preview,
+            file: `${p.slug}-preview.mp3`,
+            title: d.title,
+            artist: site.name,
+            release: d.title,
+            kind: 'samples',
+            href: '/materials',
+            cover: thumb,
+            coverLarge: large,
+            duration: 0,
+            genre: d.genre,
+            status: 'released',
+            download: false,
+          },
+        ]
+      : [];
+    const meta = [d.count ? t('samples.count', { n: d.count }) : undefined, d.bpm && `${d.bpm} BPM`, d.key]
+      .filter(Boolean)
+      .join(' · ');
+    const chips = [t(`packOne.${p.category}`), d.genre, d.format, ...d.tags].filter(Boolean) as string[];
+    return { ...p, d, cover, preview, meta, chips };
+  }),
+);
+
+const filters = [
+  { key: 'all', label: t('filter.all') },
+  ...packCategories.map((c) => ({ key: c, label: t(`pack.${c}`) })),
+];
+const how = [
+  { title: t('samples.inside'), text: t('samples.insideText') },
+  { title: t('samples.format'), text: t('samples.formatText') },
+  { title: t('samples.use'), text: t('samples.useText') },
+];
+---
+
+<Base lang={lang} title={t('samples.title')} description={t('samples.lead')} active="materials">
+  <section class="container intro">
+    <div class="eyebrow">{t('samples.eyebrow')}</div>
+    <h1 class="h1">{t('samples.title')}</h1>
+    <p class="lead">{t('samples.lead')}</p>
+    <p class="text-soft">{t('samples.text')}</p>
+  </section>
+
+  <section class="section">
+    <div class="container block" data-packs>
+      <div class="head">
+        <h2 class="h2">{t('samples.all')}</h2>
+        <div class="chips" role="group" aria-label={t('filter.label')}>
+          {filters.map((f, i) => (
+            <button type="button" class="chip" data-filter={f.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {packs.length ? (
+        <div class="grid">
+          {packs.map((p) => (
+            <article class="card pack" data-cat={p.category}>
+              <Image src={p.cover} alt="" width={720} height={720} class="pack-cover" />
+              <div class="pack-head">
+                <div class="pack-titles">
+                  <h3 class="pack-title">{p.d.title}</h3>
+                  {p.meta && <div class="pack-meta">{p.meta}</div>}
+                </div>
+                <span class:list={['badge', p.d.price === 'free' ? 'badge-fill' : 'price']}>
+                  {p.d.price === 'free' ? t('samples.free') : p.d.price}
+                </span>
+              </div>
+              {p.chips.length > 0 && (
+                <ul class="pack-tags">
+                  {p.chips.map((c) => (
+                    <li>{c}</li>
+                  ))}
+                </ul>
+              )}
+              <div class="pack-actions">
+                <PlayButton client:visible tracks={p.preview} variant="round" lang={lang} />
+                {p.d.download ? (
+                  <a class="btn btn-sm btn-outline" href={p.d.download} target="_blank" rel="noopener">
+                    <Icon name="download" size={16} />
+                    {t('samples.download')}
+                  </a>
+                ) : (
+                  <span class="btn btn-sm btn-outline" aria-disabled="true">
+                    <Icon name="download" size={16} />
+                    {t('samples.download')}
+                  </span>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="muted">{t('samples.empty')}</p>
+      )}
+      <p class="muted" data-empty hidden>
+        {t('home.empty')}
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container block">
+      <h2 class="h2">{t('samples.how')}</h2>
+      <div class="how">
+        {how.map((h) => (
+          <div class="card how-card">
+            <h3 class="h3">{h.title}</h3>
+            <p>{h.text}</p>
+          </div>
+        ))}
+      </div>
+      <a href={localize('/licenses', lang)} class="btn btn-primary terms">
+        {t('samples.terms')}
+      </a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  function setupPacks() {
+    const root = document.querySelector<HTMLElement>('[data-packs]');
+    if (!root) return;
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-cat]')];
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        const f = b.dataset.filter;
+        let shown = 0;
+        cards.forEach((c) => {
+          c.hidden = f !== 'all' && c.dataset.cat !== f;
+          if (!c.hidden) shown++;
+        });
+        empty.hidden = !cards.length || shown > 0;
+      }),
+    );
+  }
+  document.addEventListener('astro:page-load', setupPacks);
+</script>
+
+<style>
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding-block: 72px 56px;
+  }
+  .intro .lead {
+    font-size: 20px;
+    max-width: 760px;
+  }
+  .intro .text-soft {
+    font-size: 16px;
+    max-width: 760px;
+  }
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-block: 56px 64px;
+  }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .pack {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+  }
+  .pack :global(.pack-cover) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  .pack-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .pack-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+  .pack-title {
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .pack-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .price {
+    border-color: var(--line-2);
+  }
+  .pack-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .pack-tags li {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 10px;
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .pack-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pack-actions :global(.round) {
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+  }
+  .how {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .how-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+  }
+  .how-card p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .terms {
+    align-self: flex-start;
+  }
+
+  @media (max-width: 1199px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 767px) {
+    .intro {
+      gap: 14px;
+      padding-block: 25px 28px;
+    }
+    .intro .lead {
+      font-size: 16px;
+    }
+    .intro .text-soft {
+      font-size: 13px;
+    }
+    .block {
+      gap: 14px;
+      padding-block: 22px 28px;
+    }
+    .grid,
+    .how {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+    .how-card {
+      padding: 14px;
+    }
+    .how-card p {
+      font-size: 13px;
+    }
+    .chips {
+      gap: 6px;
+    }
+    .chips .chip {
+      height: 36px;
+      padding: 0 14px;
+      font-size: 11px;
+    }
+    .terms {
+      align-self: stretch;
+    }
+  }
+</style>

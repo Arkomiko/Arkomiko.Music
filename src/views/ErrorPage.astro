@@ -1,0 +1,91 @@
+---
+// Страницы ошибок: 404 (нет такого адреса), 403 (доступ закрыт), 500 (ошибка сервера), 503 (обслуживание).
+// Иллюстрации — из макета (System-Icons), в версиях для тёмной и светлой темы.
+import Base from '../layouts/Base.astro';
+import SystemArt from '../components/SystemArt.astro';
+import { localize, useT, type Lang } from '../i18n';
+import address07Dark from '../assets/system/address-error-07-dark-anim.svg?url';
+import address07Light from '../assets/system/address-error-07-light-anim.svg?url';
+import address07DarkVideo from '../assets/system/address-error-07-dark-anim-1024.webm?url';
+import address07LightVideo from '../assets/system/address-error-07-light-anim-1024.webm?url';
+import page02Dark from '../assets/system/page-error-02-dark-anim.svg?url';
+import page02Light from '../assets/system/page-error-02-light-anim.svg?url';
+import page03Dark from '../assets/system/page-error-03-dark.svg?url';
+import page03Light from '../assets/system/page-error-03-light.svg?url';
+import page07Dark from '../assets/system/page-error-07-dark-anim.svg?url';
+import page07Light from '../assets/system/page-error-07-light-anim.svg?url';
+
+export type ErrorCode = 404 | 403 | 500 | 503;
+
+interface Props {
+  lang: Lang;
+  code: ErrorCode;
+}
+const { lang, code } = Astro.props;
+const t = useT(lang);
+
+const art: Record<ErrorCode, { dark: string; light: string; video?: { dark: string; light: string } }> = {
+  404: {
+    dark: address07Dark,
+    light: address07Light,
+    video: { dark: address07DarkVideo, light: address07LightVideo },
+  },
+  500: { dark: page02Dark, light: page02Light },
+  403: { dark: page03Dark, light: page03Light },
+  503: { dark: page07Dark, light: page07Light },
+};
+const title = t(`error.${code}.title`);
+---
+
+<Base lang={lang} title={title} noindex>
+  <section class="container error">
+    <SystemArt {...art[code]} />
+    <div class="eyebrow">{code}</div>
+    <h1 class="title">{title}</h1>
+    <p class="text">{t(`error.${code}.text`)}</p>
+    <a href={localize('/', lang)} class="btn btn-primary">
+      {t('error.home')}
+    </a>
+  </section>
+</Base>
+
+<style>
+  .error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-block: 56px 72px;
+    text-align: center;
+  }
+  .title {
+    max-width: 900px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 44px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  .text {
+    max-width: 640px;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--soft);
+  }
+  .btn {
+    margin-top: 8px;
+  }
+  @media (max-width: 767px) {
+    .error {
+      gap: 14px;
+      padding-block: 32px 40px;
+    }
+    .title {
+      font-size: 26px;
+    }
+    .text {
+      font-size: 14px;
+    }
+  }
+</style>

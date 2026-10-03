@@ -1,0 +1,24 @@
+---
+// Служебные страницы non_content_user / non_traks / non_pack: их же показывают главная, «Музыка» и «Материалы»,
+// когда в contents_user/ нет контента.
+import Base from '../layouts/Base.astro';
+import EmptyState, { type EmptyKind } from '../components/EmptyState.astro';
+import type { NavKey } from '../components/Header.astro';
+import { useT, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  kind: EmptyKind;
+  active?: NavKey;
+  /** true — отдельная служебная страница (не индексируется). */
+  standalone?: boolean;
+}
+const { lang, kind, active, standalone = false } = Astro.props;
+const t = useT(lang);
+---
+
+<Base lang={lang} title={t(`empty.${kind}.title`)} active={active} noindex={standalone}>
+  <section class="container">
+    <EmptyState lang={lang} kind={kind} />
+  </section>
+</Base>

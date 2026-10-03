@@ -1,0 +1,91 @@
+---
+// Иллюстрация системной страницы (ошибки, пустые состояния) в двух вариантах — для тёмной и светлой темы.
+// С видео: прозрачный WEBM (VP9 + альфа). Где он не подойдёт — Safari (не умеет прозрачность VP9) и
+// «уменьшить движение» в системе — показывается SVG того же рисунка.
+interface Props {
+  dark: string;
+  light: string;
+  video?: { dark: string; light: string };
+  size?: number;
+}
+const { dark, light, video, size = 320 } = Astro.props;
+---
+
+<div class="system-art" data-system-art>
+  {video ? (
+    <>
+      <video
+        class="art theme-dark-only"
+        autoplay
+        loop
+        muted
+        playsinline
+        width={size}
+        height={size}
+        data-alpha-video
+      >
+        <source src={video.dark} type="video/webm" />
+      </video>
+      <video
+        class="art theme-light-only"
+        autoplay
+        loop
+        muted
+        playsinline
+        width={size}
+        height={size}
+        data-alpha-video
+      >
+        <source src={video.light} type="video/webm" />
+      </video>
+      <img class="art theme-dark-only fallback" src={dark} alt="" width={size} height={size} />
+      <img class="art theme-light-only fallback" src={light} alt="" width={size} height={size} />
+    </>
+  ) : (
+    <>
+      <img class="art theme-dark-only" src={dark} alt="" width={size} height={size} />
+      <img class="art theme-light-only" src={light} alt="" width={size} height={size} />
+    </>
+  )}
+</div>
+
+<script>
+  // Safari проигрывает WEBM, но без прозрачности — там вместо видео показываем SVG.
+  function useFallbackInSafari() {
+    const ua = navigator.userAgent;
+    const safari = /Safari\//.test(ua) && !/Chrome\/|Chromium\/|Edg\/|OPR\/|Android/.test(ua);
+    if (!safari) return;
+    document
+      .querySelectorAll<HTMLElement>('[data-system-art]')
+      .forEach((root) => root.classList.add('no-alpha'));
+  }
+  document.addEventListener('astro:page-load', useFallbackInSafari);
+</script>
+
+<style>
+  .system-art {
+    display: flex;
+    justify-content: center;
+  }
+  .art {
+    width: min(320px, 70vw);
+    height: auto;
+  }
+  .fallback {
+    display: none;
+  }
+  .system-art:global(.no-alpha) video {
+    display: none;
+  }
+  .system-art:global(.no-alpha) .fallback {
+    display: block;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    video {
+      display: none;
+    }
+    .fallback {
+      display: block;
+    }
+  }
+</style>

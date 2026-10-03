@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-7.6 13.4 415.2 415.2" width="1024" height="1024"><style>
+.blink{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}
+@keyframes blink{0%,44%,52%,100%{transform:scaleY(1)}48%{transform:scaleY(.12)}}
+.tear{animation:tear 2s ease-in infinite}
+@keyframes tear{0%{transform:translateY(0);opacity:0}15%{opacity:1}75%{opacity:1}100%{transform:translateY(9px);opacity:0}}
+.tearlong{animation:tearlong 4s ease-in infinite}
+@keyframes tearlong{0%,10%{transform:translateY(0);opacity:0}20%{opacity:1}70%{opacity:1}80%,100%{transform:translateY(62px);opacity:0}}
+.tail{transform-box:fill-box;transform-origin:0% 100%;animation:tail 4s ease-in-out infinite}
+@keyframes tail{0%,100%{transform:rotate(0)}50%{transform:rotate(-2.5deg)}}
+.rip{transform-box:fill-box;transform-origin:center;animation:rip 4s ease-out infinite;opacity:0}
+.rip1{animation-delay:-1.333s}.rip2{animation-delay:-2.667s}
+@keyframes rip{0%{transform:scale(.35);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+.ripd{transform-box:fill-box;transform-origin:center;animation:ripd 4s ease-out infinite;opacity:0}
+@keyframes ripd{0%,78%{transform:scale(.2);opacity:0}80%{opacity:.9}100%{transform:scale(1.6);opacity:0}}
+.float{animation:float 4s ease-in-out infinite}
+.f1{animation-delay:-1.333s}.f2{animation-delay:-2.667s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.hover{animation:hover 4s ease-in-out infinite}
+.h1{animation-delay:-1s}.h2{animation-delay:-2s}.h3{animation-delay:-3s}
+@keyframes hover{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(0,-10px) rotate(4deg)}}
+.rain{animation:rain 1s linear infinite}
+.rain1{animation-delay:-.25s}.rain2{animation-delay:-.5s}.rain3{animation-delay:-.75s}
+@keyframes rain{0%{transform:translateY(-6px);opacity:0}20%{opacity:1}100%{transform:translateY(14px);opacity:0}}
+.roll{transform-box:fill-box;transform-origin:center;animation:roll 4s linear infinite}
+@keyframes roll{to{transform:rotate(-360deg)}}
+.spin{transform-box:fill-box;transform-origin:center;animation:spin 4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.q{transform-box:fill-box;transform-origin:50% 100%;animation:q 4s ease-in-out infinite}
+.q1{animation-delay:-1.333s}.q2{animation-delay:-2.667s}
+@keyframes q{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-5px) rotate(-6deg)}75%{transform:translateY(-2px) rotate(6deg)}}
+.march{animation:march 4s linear infinite}
+@keyframes march{to{stroke-dashoffset:-48}}
+.peek{animation:peek 4s ease-in-out infinite}
+@keyframes peek{0%,18%,92%,100%{transform:translateY(26px)}36%,74%{transform:translateY(0)}}
+.peeks{animation:peeks 4s ease-in-out infinite}
+@keyframes peeks{0%,100%{transform:translateY(10px)}40%,70%{transform:translateY(0)}}
+.plug{animation:plug 4s ease-in-out infinite}
+@keyframes plug{0%,100%{transform:translateX(0)}40%,55%{transform:translateX(12px)}60%{transform:translateX(4px)}}
+.spark{animation:spark 4s steps(1) infinite}
+@keyframes spark{0%,40%,62%,100%{opacity:0}42%,50%,58%{opacity:1}46%,54%{opacity:.2}}
+.drift{transform-box:fill-box;transform-origin:center;animation:drift 4s ease-in-out infinite}
+.d1{animation-delay:-1s}.d2{animation-delay:-2s}.d3{animation-delay:-3s}
+@keyframes drift{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(4px,-6px) rotate(25deg)}}
+.pulse{transform-box:fill-box;transform-origin:center;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}
+.breathe{animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:1}50%{opacity:.45}}
+.splitl{transform-box:fill-box;transform-origin:100% 100%;animation:splitl 4s ease-in-out infinite}
+@keyframes splitl{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-6px,4px) rotate(-5deg)}}
+.splitr{transform-box:fill-box;transform-origin:0% 100%;animation:splitr 4s ease-in-out infinite}
+@keyframes splitr{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(8px,10px) rotate(7deg)}}
+.draw{animation:draw 4s ease-in-out infinite}
+@keyframes draw{0%{stroke-dashoffset:1}55%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+.swingr{transform-box:fill-box;transform-origin:0% 50%;animation:swr 4s ease-in-out infinite}
+@keyframes swr{0%,100%{transform:rotate(0)}50%{transform:rotate(-6deg)}}
+.swingl{transform-box:fill-box;transform-origin:100% 50%;animation:swl 4s ease-in-out infinite}
+@keyframes swl{0%,100%{transform:rotate(0)}50%{transform:rotate(6deg)}}
+.shake{transform-box:fill-box;transform-origin:50% 100%;animation:shake 4s ease-in-out infinite}
+@keyframes shake{0%,30%,70%,100%{transform:rotate(0)}38%{transform:rotate(-2.5deg)}46%{transform:rotate(2.5deg)}54%{transform:rotate(-2deg)}62%{transform:rotate(1.5deg)}}
+.flutter{transform-box:fill-box;transform-origin:50% 100%;animation:flutter 4s ease-in-out infinite}
+@keyframes flutter{0%,100%{transform:skewX(0)}50%{transform:skewX(-6deg)}}
+.flick{animation:flick .5s steps(1) infinite}
+@keyframes flick{0%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.rip{opacity:.7}}
+</style><g transform="translate(76.00 330.00) rotate(0.00) scale(0.850)" ><path d="M-42.00 -60.00 L-56.00 -80.00 L-6.00 -82.00 L0.00 -60.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M42.00 -60.00 L56.00 -80.00 L6.00 -82.00 L0.00 -60.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-42.00 -60.00 L42.00 -60.00 L42.00 0.00 L-42.00 0.00 Z" fill="#0B0A0D" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-39.00 -60.00 L39.00 -60.00 L34.00 -52.00 L-34.00 -52.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="1.32" stroke-linejoin="round" stroke-linecap="round" /><rect x="12.00" y="-22.00" width="20.00" height="13.00" rx="1.5" fill="#141118" stroke="#F4F1F7" stroke-width="1.32" stroke-linejoin="round" /><path d="M16.00 -15.50 L28.00 -15.50" fill="none" stroke="#FF93DA" stroke-width="1.7600000000000002" stroke-linejoin="round" stroke-linecap="round" /></g><g transform="translate(324.00 330.00) rotate(0.00) scale(0.850)" ><path d="M-42.00 -60.00 L-56.00 -80.00 L-6.00 -82.00 L0.00 -60.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M42.00 -60.00 L56.00 -80.00 L6.00 -82.00 L0.00 -60.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-42.00 -60.00 L42.00 -60.00 L42.00 0.00 L-42.00 0.00 Z" fill="#0B0A0D" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-39.00 -60.00 L39.00 -60.00 L34.00 -52.00 L-34.00 -52.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="1.32" stroke-linejoin="round" stroke-linecap="round" /><rect x="12.00" y="-22.00" width="20.00" height="13.00" rx="1.5" fill="#141118" stroke="#F4F1F7" stroke-width="1.32" stroke-linejoin="round" /><path d="M16.00 -15.50 L28.00 -15.50" fill="none" stroke="#FF93DA" stroke-width="1.7600000000000002" stroke-linejoin="round" stroke-linecap="round" /></g><g class="shake"><g transform="translate(200.00 266.00) rotate(0.00) scale(0.850)" ><g class="tail"><path d="M-30.00 -40.00 L-54.00 -60.00 L-70.00 -92.00 L-64.00 -118.00 L-52.00 -94.00 L-38.00 -68.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-70.00 -92.00 L-64.00 -118.00 L-52.00 -94.00 Z" fill="#141118" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-54.00 -60.00 L-38.00 -68.00" fill="none" stroke="#F4F1F7" stroke-width="1.32" stroke-linejoin="round" stroke-linecap="round" /></g><path d="M-6.00 -42.00 L-8.00 -74.00 L-18.00 -76.00 L-18.00 -44.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-8.00 -74.00 L-6.00 -84.00 L-18.00 -86.00 L-18.00 -76.00 Z" fill="#141118" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M22.00 0.00 L16.00 -30.00 L-8.00 -48.00 L-34.00 -42.00 L-42.00 -20.00 L-32.00 0.00 Z" fill="#0B0A0D" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-10.00 -40.00 L-34.00 -42.00 L-42.00 -20.00 L-32.00 0.00 L-8.00 0.00 L-4.00 -20.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="1.7600000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M-24.00 -36.00 L-42.00 -62.00 L-50.00 -56.00 L-36.00 -28.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-42.00 -62.00 L-46.00 -72.00 L-56.00 -68.00 L-50.00 -56.00 Z" fill="#141118" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /></g><g transform="translate(200.00 330.00) rotate(0.00) scale(1.050)" ><path d="M-42.00 -60.00 L-56.00 -80.00 L-6.00 -82.00 L0.00 -60.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M42.00 -60.00 L56.00 -80.00 L6.00 -82.00 L0.00 -60.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-42.00 -60.00 L42.00 -60.00 L42.00 0.00 L-42.00 0.00 Z" fill="#0B0A0D" stroke="#F4F1F7" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" /><path d="M-39.00 -60.00 L39.00 -60.00 L34.00 -52.00 L-34.00 -52.00 Z" fill="#1C1822" stroke="#F4F1F7" stroke-width="1.32" stroke-linejoin="round" stroke-linecap="round" /><rect x="12.00" y="-22.00" width="20.00" height="13.00" rx="1.5" fill="#141118" stroke="#F4F1F7" stroke-width="1.32" stroke-linejoin="round" /><path d="M16.00 -15.50 L28.00 -15.50" fill="none" stroke="#FF93DA" stroke-width="1.7600000000000002" stroke-linejoin="round" stroke-linecap="round" /></g></g><g class="hover h0"><g transform="translate(140.00 160.00) rotate(-24.00) scale(0.900)" ><rect x="-16.00" y="-10.00" width="32.00" height="20.00" rx="4" fill="#1C1822" stroke="#F4F1F7" stroke-width="1.54" stroke-linejoin="round" /><path d="M-9.00 -2.00 L-9.00 2.00" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M-4.50 -4.50 L-4.50 4.50" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M0.00 -7.00 L0.00 7.00" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M4.50 -4.50 L4.50 4.50" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M9.00 -2.50 L9.00 2.50" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /></g></g><g class="hover h1"><g transform="translate(262.00 150.00) rotate(20.00) scale(0.900)" ><rect x="-16.00" y="-10.00" width="32.00" height="20.00" rx="4" fill="#1C1822" stroke="#F4F1F7" stroke-width="1.54" stroke-linejoin="round" /><path d="M-9.00 -2.00 L-9.00 2.00" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M-4.50 -4.50 L-4.50 4.50" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M0.00 -7.00 L0.00 7.00" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M4.50 -4.50 L4.50 4.50" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M9.00 -2.50 L9.00 2.50" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /></g></g><g class="hover h2"><g transform="translate(200.00 120.00) rotate(0.00) scale(0.900)" ><rect x="-16.00" y="-10.00" width="32.00" height="20.00" rx="4" fill="#1C1822" stroke="#F4F1F7" stroke-width="1.54" stroke-linejoin="round" /><path d="M-9.00 -2.00 L-9.00 2.00" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M-4.50 -4.50 L-4.50 4.50" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M0.00 -7.00 L0.00 7.00" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M4.50 -4.50 L4.50 4.50" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /><path d="M9.00 -2.50 L9.00 2.50" fill="none" stroke="#FF93DA" stroke-width="1.9800000000000002" stroke-linejoin="round" stroke-linecap="round" /></g></g></svg>

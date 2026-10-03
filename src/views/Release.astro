@@ -1,0 +1,497 @@
+---
+// Страница релиза или техно-демки: /release/[slug] и /en/release/[slug].
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PlayButton from '../components/PlayButton.vue';
+import Tracklist from '../components/Tracklist.vue';
+import { coverOf, toPlayerTracks, type Item } from '../lib/media';
+import { platformLabels, type Permission } from '../site.config';
+import { formatDate, localize, useT, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  item: Item;
+}
+const { lang, item } = Astro.props;
+const t = useT(lang);
+
+const tracks = await toPlayerTracks(item);
+const cover = coverOf(item, lang);
+const og = (await getImage({ src: cover, width: 1200, height: 1200, format: 'jpg' })).src;
+const description = item.entry.body?.trim().split(/\n\s*\n/)[0] || undefined;
+const meta = `${t(`kind.${item.kind}`)} · ${formatDate(item.date, item.exactDate, lang)}`;
+const first = tracks[0];
+
+const cells = [
+  { label: t('release.composition'), value: t(`composition.${item.composition}`) },
+  { label: t('release.genre'), value: item.genre ?? '—' },
+  { label: t('release.bpm'), value: item.bpm ? String(item.bpm) : '—' },
+  { label: t('release.key'), value: item.key ?? '—' },
+];
+
+const permLabel: Record<Permission, string> = {
+  allowed: t('perm.allowed'),
+  conditions: t('perm.conditions'),
+  forbidden: t('perm.forbidden'),
+};
+const license: { label: string; value: string; fill?: boolean }[] = [
+  {
+    label: t('license.streams'),
+    value: permLabel[item.license.streams],
+    fill: item.license.streams === 'allowed',
+  },
+  {
+    label: t('license.monetization'),
+    value: permLabel[item.license.monetization],
+    fill: item.license.monetization === 'allowed',
+  },
+  {
+    label: t('license.remixes'),
+    value: permLabel[item.license.remixes],
+    fill: item.license.remixes === 'allowed',
+  },
+  { label: t('license.credit'), value: item.license.credit },
+];
+---
+
+<Base lang={lang} title={item.title} description={description} image={og} active="music">
+  <section class="hero">
+    <Image src={cover} alt="" width={720} height={720} class="hero-bg" loading="eager" />
+    <div class="container hero-inner">
+      <Image
+        src={cover}
+        alt={item.title}
+        width={1024}
+        height={1024}
+        class="cover"
+        loading="eager"
+        sizes="(max-width: 767px) 90vw, 512px"
+        widths={[360, 512, 720, 1024]}
+      />
+      <div class="info">
+        <div class="top">
+          <div class="eyebrow kicker">{meta}</div>
+          <div class="logo-name artist">Arkomiko</div>
+        </div>
+        <h1 class="h1 title">{item.title}</h1>
+        <div class="bottom">
+          <dl class="cells">
+            {cells.map((c) => (
+              <div class="cell">
+                <dt class="mono-label">{c.label}</dt>
+                <dd>{c.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <div class="actions">
+            <PlayButton client:load tracks={tracks} lang={lang} />
+            {item.download && first ? (
+              <a class="btn btn-outline" href={first.src} download={first.file}>
+                {t('release.download')}
+              </a>
+            ) : (
+              <span class="btn btn-outline" aria-disabled="true">
+                {t('release.download')}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container body">
+    <section class="part tracks" aria-labelledby="tracklist-h">
+      <h2 id="tracklist-h" class="h2 part-title">
+        {t('release.tracklist')}
+      </h2>
+      <Tracklist client:visible tracks={tracks} lang={lang} />
+    </section>
+
+    {item.tags.length > 0 && (
+      <section class="part tags-block">
+        <div class="mono-label part-label">{t('release.tags')}</div>
+        <ul class="tag-list">
+          {item.tags.map((tag) => (
+            <li class="tag">#{tag}</li>
+          ))}
+        </ul>
+        <p class="hint">{t('release.tagsHint')}</p>
+      </section>
+    )}
+
+    {item.links.length > 0 && (
+      <section class="part listen">
+        <div class="mono-label part-label">{t('release.listenOn')}</div>
+        <div class="platforms">
+          {item.links.map(([key, url]) => (
+            <a href={url} target="_blank" rel="noopener">
+              {platformLabels[key]?.[lang] ?? key}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <aside class="part license" aria-labelledby="license-h">
+      <h2 id="license-h" class="h2 part-title">
+        {t('release.license')}
+      </h2>
+      <dl class="license-card card">
+        {license.map((l) => (
+          <div class="license-row">
+            <dt>{l.label}</dt>
+            <dd class:list={['license-value', { fill: l.fill }]}>{l.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <a href={localize('/licenses', lang)} class="full-license">
+        {t('release.fullLicense')}
+      </a>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero :global(.hero-bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: var(--cover-blur-opacity);
+    filter: blur(24px);
+    transform: scale(1.1);
+  }
+  .hero-inner {
+    position: relative;
+    display: flex;
+    gap: 56px;
+    align-items: flex-start;
+    padding-block: 64px;
+  }
+  .hero :global(.cover) {
+    flex-shrink: 0;
+    width: 512px;
+    height: 512px;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    min-width: 0;
+    min-height: 512px;
+  }
+  .top {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .kicker {
+    font-size: 13px;
+    line-height: 1;
+  }
+  .artist {
+    font-size: 44px;
+    line-height: 1;
+  }
+  .title {
+    margin-top: 14px;
+  }
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .cells {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+  }
+  .cell {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .cell dd {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  .actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 420px;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      'tracks license'
+      'tags license'
+      'listen license';
+    column-gap: 72px;
+    padding-block: 64px;
+  }
+  .part {
+    display: flex;
+    flex-direction: column;
+  }
+  .part-title {
+    font-size: 28px;
+  }
+  .part-label {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+  .tracks {
+    grid-area: tracks;
+    gap: 24px;
+  }
+  .tags-block {
+    grid-area: tags;
+    gap: 14px;
+    margin-top: 32px;
+  }
+  .listen {
+    grid-area: listen;
+    gap: 14px;
+    margin-top: 32px;
+  }
+  .license {
+    grid-area: license;
+    gap: 20px;
+    align-self: start;
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hint {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .platforms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .platforms a {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding: 0 20px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .license-card {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 28px;
+  }
+  .license-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    height: 52px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .license-row:last-child {
+    border-bottom: 0;
+  }
+  .license-value {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+  }
+  .license-value.fill {
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  .full-license {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  @media (max-width: 1199px) {
+    .hero-inner {
+      gap: 40px;
+    }
+    .hero :global(.cover) {
+      width: 380px;
+      height: 380px;
+    }
+    .info {
+      min-height: 380px;
+      gap: 24px;
+    }
+    .cells {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .body {
+      grid-template-columns: minmax(0, 1fr) 340px;
+      column-gap: 40px;
+    }
+  }
+  @media (max-width: 959px) {
+    .h1.title {
+      font-size: 48px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero {
+      border-bottom: 0;
+    }
+    .hero :global(.hero-bg) {
+      display: none;
+    }
+    .hero-inner {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+      padding-block: 12px 25px;
+    }
+    .hero :global(.cover) {
+      width: 90%;
+      height: auto;
+      aspect-ratio: 1;
+      align-self: center;
+    }
+    .info {
+      min-height: 0;
+      justify-content: flex-start;
+      gap: 14px;
+    }
+    .top,
+    .bottom {
+      display: contents;
+    }
+    .kicker {
+      order: 1;
+      font-size: 11px;
+    }
+    .title {
+      order: 2;
+      margin: 0;
+    }
+    .artist {
+      order: 3;
+      font-size: 28px;
+    }
+    .cells {
+      order: 4;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .cell {
+      gap: 4px;
+      padding: 11px;
+    }
+    .cell dt {
+      font-size: 9px;
+    }
+    .cell dd {
+      font-size: 13px;
+    }
+    .actions {
+      order: 5;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .body {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+    .part {
+      gap: 11px;
+      margin: 0;
+      padding: 18px 14px 25px;
+      border-top: 1px solid var(--line);
+    }
+    .tags-block {
+      order: 1;
+    }
+    .tracks {
+      order: 2;
+    }
+    .listen {
+      order: 3;
+    }
+    .license {
+      order: 4;
+      gap: 12px;
+      align-self: stretch;
+    }
+    .part-title {
+      font-size: 23px;
+    }
+    .part-label {
+      font-size: 10px;
+    }
+    .tag-list,
+    .platforms {
+      gap: 7px;
+    }
+    .hint {
+      display: none;
+    }
+    .platforms a {
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 19px;
+      font-size: 11px;
+    }
+    .license-card {
+      padding: 4px 14px;
+    }
+    .license-row {
+      height: 42px;
+      font-size: 12px;
+    }
+    .license-value {
+      font-size: 10px;
+    }
+    .license-value.fill {
+      padding: 4px 9px;
+    }
+    .full-license {
+      font-size: 11px;
+    }
+  }
+</style>

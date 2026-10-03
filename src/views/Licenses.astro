@@ -1,0 +1,394 @@
+---
+// «Лицензии»: типы лицензий, таблица «Что можно», строка указания автора, вопросы, «Особый случай?».
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+import { localize, useT, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+
+const types = [
+  { title: t('licenses.free'), price: t('licenses.freePrice'), text: t('licenses.freeText') },
+  { title: t('licenses.standard'), price: t('licenses.standardPrice'), text: t('licenses.standardText') },
+  { title: t('licenses.extended'), price: t('licenses.extendedPrice'), text: t('licenses.extendedText') },
+];
+
+// y — можно, c — с условием, n — нельзя. Колонки: бесплатная, стандартная, расширенная.
+type P = 'y' | 'c' | 'n';
+const rows: { use: string; p: [P, P, P] }[] = [
+  { use: t('licenses.use.streams'), p: ['y', 'y', 'y'] },
+  { use: t('licenses.use.videos'), p: ['y', 'y', 'y'] },
+  { use: t('licenses.use.monetization'), p: ['c', 'y', 'y'] },
+  { use: t('licenses.use.podcasts'), p: ['y', 'y', 'y'] },
+  { use: t('licenses.use.games'), p: ['n', 'c', 'y'] },
+  { use: t('licenses.use.ads'), p: ['n', 'n', 'y'] },
+  { use: t('licenses.use.remixes'), p: ['c', 'c', 'y'] },
+  { use: t('licenses.use.samples'), p: ['c', 'y', 'y'] },
+];
+const pill: Record<P, { cls: string; label: string }> = {
+  y: { cls: 'badge-fill', label: t('licenses.yes') },
+  c: { cls: 'badge-ink', label: t('licenses.cond') },
+  n: { cls: 'badge-muted', label: t('licenses.no') },
+};
+const columns = [t('licenses.free'), t('licenses.standard'), t('licenses.extended')];
+
+const faq = [1, 2, 3, 4].map((i) => ({
+  q: t(`licenses.q${i}` as 'licenses.q1'),
+  a: t(`licenses.a${i}` as 'licenses.a1'),
+}));
+const creditLine = t('licenses.creditLine');
+const email = site.email || '[email]';
+const contactHref = site.email ? `mailto:${site.email}` : localize('/about#contacts', lang);
+---
+
+<Base lang={lang} title={t('nav.licenses')} description={t('licenses.lead')} active="licenses">
+  <section class="container intro">
+    <div class="eyebrow">{t('licenses.eyebrow')}</div>
+    <h1 class="h1">{t('licenses.title')}</h1>
+    <p class="lead">{t('licenses.lead')}</p>
+    <p class="text-soft">{t('licenses.text')}</p>
+  </section>
+
+  <section class="section">
+    <div class="container block">
+      <h2 class="h2">{t('licenses.types')}</h2>
+      <div class="types">
+        {types.map((l) => (
+          <div class="card type">
+            <h3 class="h3 type-title">{l.title}</h3>
+            <div class="type-price">{l.price}</div>
+            <p>{l.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container block">
+      <h2 class="h2">{t('licenses.allowed')}</h2>
+      <div class="table" role="table">
+        <div class="tr th" role="row">
+          <span role="columnheader">{t('licenses.where')}</span>
+          {columns.map((c) => (
+            <span role="columnheader">{c}</span>
+          ))}
+        </div>
+        {rows.map((r) => (
+          <div class="tr" role="row">
+            <span class="use" role="rowheader">
+              {r.use}
+            </span>
+            {r.p.map((p, i) => (
+              <span class="cell" role="cell" data-label={columns[i]}>
+                <span class:list={['badge', pill[p].cls]}>{pill[p].label}</span>
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container block split">
+      <div class="split-intro">
+        <h2 class="h2">{t('licenses.credit')}</h2>
+        <p>{t('licenses.creditText')}</p>
+      </div>
+      <div class="card credit">
+        <pre class="credit-line" data-credit>{creditLine}</pre>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline copy"
+          data-copy
+          data-label={t('licenses.copy')}
+          data-done={t('licenses.copied')}
+        >
+          {t('licenses.copy')}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container block">
+      <h2 class="h2">{t('licenses.faq')}</h2>
+      <dl class="faq">
+        {faq.map((f) => (
+          <div class="faq-row">
+            <dt>{f.q}</dt>
+            <dd>{f.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container block special">
+      <div class="special-text">
+        <h2 class="h2">{t('licenses.special')}</h2>
+        <p class="text-soft">
+          {t('licenses.specialText')} {email}
+        </p>
+      </div>
+      <a href={contactHref} class="btn btn-primary">
+        {t('licenses.contact')}
+      </a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  function setupCopy() {
+    const btn = document.querySelector<HTMLButtonElement>('[data-copy]');
+    const text = document.querySelector('[data-credit]')?.textContent ?? '';
+    btn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = btn.dataset.done ?? '';
+        setTimeout(() => (btn.textContent = btn.dataset.label ?? ''), 1600);
+      } catch {}
+    });
+  }
+  document.addEventListener('astro:page-load', setupCopy);
+</script>
+
+<style>
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding-block: 72px 56px;
+  }
+  .intro .lead {
+    font-size: 20px;
+    max-width: 760px;
+  }
+  .intro .text-soft {
+    font-size: 16px;
+    max-width: 760px;
+  }
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-block: 56px 64px;
+  }
+
+  .types {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .type {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+  }
+  .type-title {
+    font-size: 20px;
+  }
+  .type-price {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--accent-ink);
+  }
+  .type p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 200px 200px 200px;
+    gap: 20px;
+    align-items: center;
+    height: 60px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .th {
+    height: auto;
+    padding-bottom: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .use {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: 420px minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+  .split-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .split-intro p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .credit {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+  }
+  .credit-line {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+  .copy {
+    align-self: flex-start;
+  }
+
+  .faq {
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+  .faq-row {
+    display: grid;
+    grid-template-columns: 420px minmax(0, 1fr);
+    gap: 40px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .faq-row dt {
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .faq-row dd {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .special {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+  }
+  .special-text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  @media (max-width: 1199px) {
+    .tr {
+      grid-template-columns: minmax(0, 1fr) repeat(3, 150px);
+    }
+    .split,
+    .faq-row {
+      grid-template-columns: 300px minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 959px) {
+    .types {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .tr {
+      grid-template-columns: minmax(0, 1fr) repeat(3, 120px);
+      gap: 12px;
+    }
+  }
+  @media (max-width: 767px) {
+    .intro {
+      gap: 14px;
+      padding-block: 25px 28px;
+    }
+    .intro .lead {
+      font-size: 16px;
+    }
+    .intro .text-soft {
+      font-size: 13px;
+    }
+    .block {
+      gap: 14px;
+      padding-block: 22px 28px;
+    }
+    .type {
+      padding: 14px;
+    }
+    .type-title {
+      font-size: 14px;
+    }
+    .type p {
+      font-size: 13px;
+    }
+    /* Таблица превращается в карточки: строка — название, под ним три пары «лицензия — статус». */
+    .th {
+      display: none;
+    }
+    .tr {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      height: auto;
+      padding: 14px 0;
+    }
+    .use {
+      font-size: 14px;
+    }
+    .cell {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cell::before {
+      content: attr(data-label);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .split,
+    .faq-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .faq-row {
+      padding: 14px 0;
+    }
+    .faq-row dt {
+      font-size: 14px;
+    }
+    .faq-row dd {
+      font-size: 13px;
+    }
+    .credit {
+      padding: 14px;
+    }
+    .credit-line {
+      font-size: 12px;
+    }
+    .special {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>

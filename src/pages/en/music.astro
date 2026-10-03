@@ -1,0 +1,10 @@
+---
+import Music from '../../views/Music.astro';
+import Empty from '../../views/Empty.astro';
+import { emptyKind } from '../../lib/media';
+
+// Нет контента — вместо страницы показываем пустое состояние.
+const kind = await emptyKind('music');
+---
+
+{kind ? <Empty lang="en" kind={kind} active="music" /> : <Music lang="en" />}

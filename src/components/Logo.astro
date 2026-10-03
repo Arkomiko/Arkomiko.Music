@@ -1,0 +1,52 @@
+---
+// Логотип «лиса в A» (вариант «Грани»). Контур = currentColor, глаза = var(--logo-eye).
+// mark — для шапки: грани залиты фоном, линии толстые. line — крупный, тонкими линиями.
+interface Props {
+  variant?: 'mark' | 'line';
+  size?: number;
+  label?: string;
+  class?: string;
+}
+const { variant = 'mark', size = 42, label = 'Arkomiko', class: className } = Astro.props;
+
+const facets = [
+  'M50 6 L35 43 L29 60 L10 94 Z',
+  'M50 6 L35 43 L44 53 L56 53 L65 43 Z',
+  'M50 6 L65 43 L71 60 L90 94 Z',
+  'M10 94 L29 60 L50 85 Z',
+  'M90 94 L71 60 L50 85 Z',
+  'M10 94 L50 85 L90 94 Z',
+  'M29 60 L35 43 L44 53 L56 53 L65 43 L71 60 L50 85 Z',
+];
+const eyes = 'M36.5 62.6 L42.5 63.4 L46.5 67.8 L41 67 Z M63.5 62.6 L57.5 63.4 L53.5 67.8 L59 67 Z';
+const mark = variant === 'mark';
+---
+
+<svg
+  viewBox={mark ? '4 2 92 96' : '-4 -4 108 108'}
+  width={size}
+  height={mark ? Math.round((size * 96) / 92) : size}
+  role="img"
+  aria-label={label}
+  class={className}
+>
+  <g
+    fill={mark ? 'var(--bg)' : 'none'}
+    stroke="currentColor"
+    stroke-width={mark ? 2.6 : 0.5}
+    stroke-linejoin="round"
+    stroke-linecap="round"
+  >
+    {facets.map((d) => (
+      <path d={d} />
+    ))}
+  </g>
+  <path
+    d="M50 6 L90 94 L10 94 Z"
+    fill="none"
+    stroke="currentColor"
+    stroke-width={mark ? 3.4 : 0.75}
+    stroke-linejoin="round"
+  />
+  <path d={eyes} fill="var(--logo-eye)" />
+</svg>

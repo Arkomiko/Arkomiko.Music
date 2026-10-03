@@ -1,12 +1,7 @@
 ---
-import Base from '../layouts/Base.astro';
+// Страница 404 одна на весь сайт, поэтому язык определяем по адресу, который не нашёлся.
+import ErrorPage from '../views/ErrorPage.astro';
+import { langFromPath } from '../i18n';
 ---
 
-<Base title="Страница не найдена">
-  <div class="wrap">
-    <h1 class="page-title">Такой страницы нет</h1>
-    <p class="muted">
-      Возможно, релиз переименовали или адрес набран с ошибкой. <a href="/releases">Открыть все релизы</a>
-    </p>
-  </div>
-</Base>
+<ErrorPage lang={langFromPath(Astro.url.pathname)} code={404} />

@@ -1,137 +1,81 @@
 ---
 import '@fontsource-variable/unbounded';
-import '@fontsource-variable/onest';
+import '@fontsource-variable/manrope';
+import '@fontsource/jetbrains-mono/500.css';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import Header, { type NavKey } from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import Player from '../components/Player.vue';
 import { site } from '../site.config';
+import { getLibrary } from '../lib/media';
+import { langs, localize, stripLang, useT, type Lang } from '../i18n';
 
 interface Props {
+  lang: Lang;
   title?: string;
   description?: string;
-  accent?: string;
   image?: string;
+  active?: NavKey;
+  /** Служебная страница: не индексировать поисковиками. */
+  noindex?: boolean;
 }
 
-const { title, description = site.description, accent, image } = Astro.props;
+const { lang, title, image, active, noindex } = Astro.props;
+const t = useT(lang);
+const description = Astro.props.description ?? t('site.description');
 const fullTitle = title ? `${title} | ${site.name}` : site.name;
-const path = Astro.url.pathname;
-const nav = [
-  { href: '/releases', label: 'Релизы' },
-  { href: '/demos', label: 'Демки' },
-  { href: '/covers', label: 'Обложки' },
-  { href: '/about', label: 'Обо мне' },
-];
+const path = stripLang(Astro.url.pathname);
+const library = await getLibrary();
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {langs.map((l) => (
+      <link rel="alternate" hreflang={l} href={new URL(localize(path, l), Astro.site)} />
+    ))}
+    <!-- Иконка вкладки зависит от темы: в тёмной — светлая лиса, в светлой — чёрная. Меняет скрипт ниже. -->
+    <link rel="icon" href="/favicon-dark.ico" sizes="any" data-theme-icon />
+    <!-- Тема ставится до отрисовки, чтобы страница не мигала: выбор из localStorage, иначе — как в системе. -->
+    <script is:inline>
+      (() => {
+        const setIcon = (doc) => {
+          const icon = doc.querySelector('link[data-theme-icon]');
+          if (icon) icon.href = `/favicon-${doc.documentElement.dataset.theme}.ico`;
+        };
+        const apply = (doc) => {
+          let theme;
+          try {
+            theme = localStorage.getItem('theme');
+          } catch {}
+          if (theme !== 'light' && theme !== 'dark')
+            theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          doc.documentElement.dataset.theme = theme;
+          setIcon(doc);
+        };
+        apply(document);
+        document.addEventListener('astro:before-swap', (e) => apply(e.newDocument));
+        // Переключение темы кнопкой (шапка или полноэкранный плеер).
+        document.addEventListener('themechange', () => setIcon(document));
+      })();
+    </script>
     <ClientRouter />
   </head>
-  <body style={accent ? `--accent: ${accent}` : undefined}>
-    <header class="site-header wrap">
-      <a href="/" class="logo">
-        {site.name}
-      </a>
-      <nav aria-label="Основное меню">
-        <ul>
-          {nav.map((n) => (
-            <li>
-              <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>
-                {n.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </header>
-
+  <body>
+    <Header lang={lang} active={active} />
     <main>
       <slot />
     </main>
-
-    <footer class="site-footer wrap">
-      <ul class="socials">
-        {site.socials.map((s) => (
-          <li>
-            <a href={s.url} rel="me noopener" target="_blank">
-              {s.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <p class="muted">
-        © {new Date().getFullYear()} {site.name}
-      </p>
-    </footer>
-
-    <Player client:load transition:persist="player" />
+    <Footer lang={lang} />
+    <Player client:load library={library} transition:persist="player" />
   </body>
 </html>
-
-<style>
-  .site-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem 2rem;
-    padding-block: 1.5rem;
-  }
-  .logo {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: 1.35rem;
-    text-decoration: none;
-  }
-  nav ul,
-  .socials {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  nav a {
-    text-decoration: none;
-    color: var(--muted);
-    padding-block: 0.25rem;
-    border-bottom: 2px solid transparent;
-  }
-  nav a:hover {
-    color: var(--text);
-  }
-  nav a[aria-current='page'] {
-    color: var(--text);
-    border-color: var(--accent);
-  }
-  .site-footer {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 6rem;
-    padding-block: 2rem;
-    border-top: 1px solid var(--line);
-  }
-  .socials a {
-    color: var(--muted);
-    text-decoration: none;
-  }
-  .socials a:hover {
-    color: var(--text);
-  }
-  .site-footer p {
-    margin: 0;
-  }
-</style>

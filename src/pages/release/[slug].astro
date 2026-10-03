@@ -1,0 +1,9 @@
+---
+import Release from '../../views/Release.astro';
+import { releasePaths } from '../../lib/media';
+
+export const getStaticPaths = releasePaths;
+const { item } = Astro.props;
+---
+
+<Release lang="ru" item={item} />

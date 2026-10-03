@@ -1,28 +1,202 @@
 ---
-import ReleaseCard from './ReleaseCard.astro';
-import type { Item } from '../lib/media';
+// «Последние релизы»: фильтры Все / Синглы / Альбомы / Каверы / Сэмплы и сетка обложек.
+import { Image } from 'astro:assets';
+import { localize, useT, type Lang } from '../i18n';
+import { coverOf, type Item, type Pack } from '../lib/media';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
+  lang: Lang;
   items: Item[];
+  packs: Pack[];
 }
-const { items } = Astro.props;
+const { lang, items, packs } = Astro.props;
+const t = useT(lang);
+
+type Card = { title: string; meta: string; href: string; cover: ImageMetadata; cat: string; date: Date };
+const category = (kind: Item['kind']) => (kind === 'ep' ? 'album' : kind);
+const cards: Card[] = [
+  ...items.map((i) => ({
+    title: i.title,
+    meta: `${t(`kind.${i.kind}`)} · ${i.date.getUTCFullYear()}`,
+    href: localize(i.href, lang),
+    cover: coverOf(i, lang),
+    cat: category(i.kind),
+    date: i.date,
+  })),
+  ...packs.map((p) => ({
+    title: p.entry.data.title,
+    meta: `${t(`packOne.${p.category}`)} · ${p.date.getUTCFullYear()}`,
+    href: localize('/materials', lang),
+    cover: coverOf(p, lang),
+    cat: 'samples',
+    date: p.date,
+  })),
+].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+const filters = [
+  { key: 'all', label: t('filter.all') },
+  { key: 'single', label: t('filter.singles') },
+  { key: 'album', label: t('filter.albums') },
+  { key: 'cover', label: t('filter.covers') },
+  { key: 'samples', label: t('filter.samples') },
+];
 ---
 
-<ul class="grid">
-  {items.map((item) => (
-    <li>
-      <ReleaseCard item={item} />
-    </li>
-  ))}
-</ul>
+<div class="releases" data-releases>
+  <div class="head">
+    <h2 class="h2">{t('home.latest')}</h2>
+    <div class="chips filters" role="group" aria-label={t('filter.label')}>
+      {filters.map((f, i) => (
+        <button type="button" class="chip" data-filter={f.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {f.label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <ul class="grid">
+    {cards.map((c) => (
+      <li data-cat={c.cat}>
+        <a href={c.href} class="card-link">
+          <Image src={c.cover} alt="" width={480} height={480} class="cover" />
+          <span class="text">
+            <span class="title">{c.title}</span>
+            <span class="meta">{c.meta}</span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+  <p class="muted empty" data-empty hidden>
+    {t('home.empty')}
+  </p>
+  <button type="button" class="btn btn-outline more" data-more hidden>
+    {t('home.allReleases')}
+  </button>
+</div>
+
+<script>
+  function setupReleases() {
+    document.querySelectorAll<HTMLElement>('[data-releases]').forEach((root) => {
+      const buttons = root.querySelectorAll<HTMLButtonElement>('[data-filter]');
+      const cards = [...root.querySelectorAll<HTMLElement>('[data-cat]')];
+      const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+      const more = root.querySelector<HTMLButtonElement>('[data-more]')!;
+      const mobile = matchMedia('(max-width: 767px)');
+      let filter = 'all';
+      let expanded = false;
+
+      const apply = () => {
+        const limit = expanded ? Infinity : mobile.matches ? 4 : 5;
+        const matching = cards.filter((c) => filter === 'all' || c.dataset.cat === filter);
+        cards.forEach((c) => (c.hidden = true));
+        matching.slice(0, limit).forEach((c) => (c.hidden = false));
+        empty.hidden = matching.length > 0;
+        more.hidden = matching.length <= limit;
+      };
+      buttons.forEach((b) =>
+        b.addEventListener('click', () => {
+          buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          filter = b.dataset.filter!;
+          apply();
+        }),
+      );
+      more.addEventListener('click', () => {
+        expanded = true;
+        apply();
+      });
+      mobile.addEventListener('change', apply);
+      apply();
+    });
+  }
+  document.addEventListener('astro:page-load', setupReleases);
+</script>
 
 <style>
+  .releases {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 2.5rem 1.75rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 24px;
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+  .card-link {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .cover {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .meta {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .more {
+    align-self: center;
+  }
+
+  @media (max-width: 1199px) {
+    .grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 959px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 767px) {
+    .releases {
+      gap: 16px;
+    }
+    .filters {
+      display: none;
+    }
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 11px;
+    }
+    .card-link {
+      gap: 9px;
+    }
+    .text {
+      gap: 2px;
+    }
+    .title {
+      font-size: 12px;
+    }
+    .meta {
+      font-size: 11px;
+    }
+    .more {
+      align-self: stretch;
+    }
   }
 </style>

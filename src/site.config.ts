@@ -1,49 +1,44 @@
 // Главные настройки сайта. Всё, что про тебя, а не про конкретный релиз, — здесь.
 
-export type License = { name: string; url?: string };
+export type Permission = 'allowed' | 'conditions' | 'forbidden';
+export type ReleaseLicense = {
+  streams: Permission;
+  monetization: Permission;
+  remixes: Permission;
+  credit: string;
+};
 
 export const site = {
   name: 'Arkomiko',
   url: 'https://arkomiko.music',
-  description: 'Музыка Arkomiko: релизы, техно-демки и обложки.',
+  email: '', // пусто — на сайте будет заглушка [email]
 
-  // Лицензии по умолчанию. Поле `license` в release.md перекрывает их.
-  licenses: {
-    releases: { name: '© Arkomiko. Все права защищены' } as License,
-    demos: {
-      name: 'CC BY-NC 4.0: можно использовать с указанием автора, не в коммерческих целях',
-      url: 'https://creativecommons.org/licenses/by-nc/4.0/deed.ru',
-    } as License,
-  },
-
-  // Цвет по умолчанию, если у релиза нет обложки или цвета.
-  accent: '#9cc3ff',
-
+  // Соцсети: подвал и страница «Об авторе».
   socials: [
     { label: 'YouTube', url: 'https://www.youtube.com/' },
     { label: 'Telegram', url: 'https://t.me/' },
-    { label: 'Twitch', url: 'https://www.twitch.tv/' },
+    { label: 'SoundCloud', url: 'https://soundcloud.com/' },
     { label: 'Discord', url: 'https://discord.gg/' },
-    { label: 'GitHub', url: 'https://github.com/' },
   ],
+
+  // Лицензия по умолчанию для блока «Лицензия» на странице релиза. Поле `license` в release.md перекрывает.
+  license: {
+    streams: 'allowed',
+    monetization: 'conditions',
+    remixes: 'conditions',
+    credit: 'Music: Arkomiko',
+  } as ReleaseLicense,
 };
 
-// Подписи для ссылок на площадки в release.md → links.
-export const platformLabels: Record<string, string> = {
-  spotify: 'Spotify',
-  apple: 'Apple Music',
-  yandex: 'Яндекс Музыка',
-  vk: 'VK Музыка',
-  youtube: 'YouTube',
-  youtubeMusic: 'YouTube Music',
-  soundcloud: 'SoundCloud',
-  bandcamp: 'Bandcamp',
-  deezer: 'Deezer',
-};
-
-export const typeLabels: Record<string, string> = {
-  single: 'Сингл',
-  ep: 'EP',
-  album: 'Альбом',
-  demo: 'Демо',
+// Подписи площадок для release.md → links.
+export const platformLabels: Record<string, { ru: string; en: string }> = {
+  spotify: { ru: 'Spotify', en: 'Spotify' },
+  apple: { ru: 'Apple Music', en: 'Apple Music' },
+  yandex: { ru: 'Яндекс Музыка', en: 'Yandex Music' },
+  vk: { ru: 'VK Музыка', en: 'VK Music' },
+  youtube: { ru: 'YouTube', en: 'YouTube' },
+  youtubeMusic: { ru: 'YouTube Music', en: 'YouTube Music' },
+  soundcloud: { ru: 'SoundCloud', en: 'SoundCloud' },
+  bandcamp: { ru: 'Bandcamp', en: 'Bandcamp' },
+  deezer: { ru: 'Deezer', en: 'Deezer' },
 };

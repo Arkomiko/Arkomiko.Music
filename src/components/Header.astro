@@ -1,0 +1,592 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { langs, langNames, localize, stripLang, useT, type Lang } from '../i18n';
+import { getCatalog, getPacks } from '../lib/media';
+
+export type NavKey = 'home' | 'music' | 'materials' | 'bio' | 'licenses';
+
+interface Props {
+  lang: Lang;
+  active?: NavKey;
+}
+const { lang, active } = Astro.props;
+const t = useT(lang);
+const path = stripLang(Astro.url.pathname);
+
+const nav: { key: NavKey; href: string; label: string }[] = [
+  { key: 'home', href: '/', label: t('nav.homePage') },
+  { key: 'music', href: '/music', label: t('nav.music') },
+  { key: 'materials', href: '/materials', label: t('nav.materials') },
+  { key: 'bio', href: '/about', label: t('nav.bio') },
+  { key: 'licenses', href: '/licenses', label: t('nav.licenses') },
+];
+
+// Данные для поиска: треки и материалы.
+const catalog = await getCatalog();
+const packs = await getPacks();
+const searchData = [
+  ...catalog.map((i) => ({
+    title: i.title,
+    meta: [t(`kind.${i.kind}`), i.genre, i.date.getUTCFullYear()].filter(Boolean).join(' · '),
+    href: localize(i.href, lang),
+    terms: [i.title, i.genre, ...i.tags, ...i.tracks.map((tr) => tr.title)].join(' ').toLowerCase(),
+  })),
+  ...packs.map((p) => ({
+    title: p.entry.data.title,
+    meta: t(`packOne.${p.category}`),
+    href: localize('/materials', lang),
+    terms: [p.entry.data.title, p.entry.data.genre, ...p.entry.data.tags].join(' ').toLowerCase(),
+  })),
+];
+---
+
+<header class="site-header" data-header>
+  <div class="container bar">
+    <a href={localize('/', lang)} class="logo" aria-label={t('nav.home')}>
+      <Logo size={42} class="logo-desktop" />
+      <Logo size={28} class="logo-mobile" />
+    </a>
+
+    <nav class="nav" aria-label={t('nav.main')}>
+      {nav.map((n) => (
+        <a href={localize(n.href, lang)} aria-current={n.key === active ? 'page' : undefined}>
+          {n.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="controls">
+      <div class="popover-wrap lang-desktop">
+        <button
+          type="button"
+          class="lang-btn"
+          data-popover-toggle="lang"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-label={t('lang.current')}
+        >
+          <Icon name="globe" />
+          <span class="lang-code">{lang.toUpperCase()}</span>
+          <Icon name="chevronDown" size={12} class="chev" />
+        </button>
+        <div class="popover lang-menu" data-popover="lang" role="menu" aria-label={t('lang.label')} hidden>
+          {langs.map((l) => (
+            <a
+              role="menuitemradio"
+              aria-checked={l === lang ? 'true' : 'false'}
+              href={localize(path, l)}
+              hreflang={l}
+              lang={l}
+            >
+              <span class="lang-item">
+                <span class="lang-item-code">{l.toUpperCase()}</span>
+                <span>{langNames[l]}</span>
+              </span>
+              {l === lang && <Icon name="check" size={16} class="check" />}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="icon-btn theme-toggle"
+        data-theme-toggle
+        data-label-light={t('theme.toLight')}
+        data-label-dark={t('theme.toDark')}
+        aria-label={t('theme.toLight')}
+      >
+        <Icon name="sun" class="i-sun" />
+        <Icon name="moon" class="i-moon" />
+      </button>
+
+      <div class="popover-wrap search-desktop">
+        <button
+          type="button"
+          class="icon-btn"
+          data-popover-toggle="search"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-label={t('search.label')}
+        >
+          <Icon name="search" />
+        </button>
+        <div class="popover search-panel" data-popover="search" hidden>
+          <label class="search-field">
+            <Icon name="search" size={16} />
+            <span class="visually-hidden">{t('search.label')}</span>
+            <input type="search" data-search-input placeholder={t('search.placeholder')} autocomplete="off" />
+          </label>
+          <ul class="search-results" data-search-results></ul>
+          <p class="search-empty" data-search-empty hidden>
+            {t('search.empty')}
+          </p>
+          <script type="application/json" data-search-data set:html={JSON.stringify(searchData)} />
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="icon-btn menu-toggle"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-label-open={t('menu.open')}
+        data-label-close={t('menu.close')}
+        aria-label={t('menu.open')}
+      >
+        <Icon name="menu" class="i-menu" />
+        <Icon name="close" class="i-close" />
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <nav aria-label={t('nav.main')}>
+      {nav.map((n) => (
+        <a href={localize(n.href, lang)} aria-current={n.key === active ? 'page' : undefined}>
+          {n.label}
+          <Icon name="chevronRight" size={16} class="chev" />
+        </a>
+      ))}
+    </nav>
+    <div class="mobile-lang">
+      <div class="mobile-lang-label">
+        <Icon name="globe" size={16} />
+        <span>{t('lang.label')}</span>
+      </div>
+      <div class="mobile-lang-options">
+        {langs.map((l) => (
+          <a href={localize(path, l)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined}>
+            {langNames[l]}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  type Item = { title: string; meta: string; href: string; terms: string };
+  let abort: AbortController | undefined;
+
+  function setupHeader() {
+    abort?.abort();
+    abort = new AbortController();
+    const { signal } = abort;
+    const header = document.querySelector<HTMLElement>('[data-header]');
+    if (!header) return;
+
+    // Выпадающие панели: язык и поиск.
+    const toggles = header.querySelectorAll<HTMLButtonElement>('[data-popover-toggle]');
+    const closeAll = (except?: string) =>
+      toggles.forEach((b) => {
+        if (b.dataset.popoverToggle === except) return;
+        b.setAttribute('aria-expanded', 'false');
+        header.querySelector(`[data-popover="${b.dataset.popoverToggle}"]`)?.setAttribute('hidden', '');
+      });
+    toggles.forEach((b) =>
+      b.addEventListener(
+        'click',
+        () => {
+          const name = b.dataset.popoverToggle!;
+          const panel = header.querySelector<HTMLElement>(`[data-popover="${name}"]`);
+          const open = b.getAttribute('aria-expanded') !== 'true';
+          closeAll(name);
+          b.setAttribute('aria-expanded', String(open));
+          panel?.toggleAttribute('hidden', !open);
+          if (open && name === 'search') panel?.querySelector('input')?.focus();
+        },
+        { signal },
+      ),
+    );
+    document.addEventListener(
+      'click',
+      (e) => {
+        if (!(e.target as Element).closest('.popover-wrap')) closeAll();
+      },
+      { signal },
+    );
+    document.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Escape') {
+          closeAll();
+          setMenu(false);
+        }
+      },
+      { signal },
+    );
+
+    // Поиск по названиям, жанрам и тегам.
+    const input = header.querySelector<HTMLInputElement>('[data-search-input]');
+    const results = header.querySelector<HTMLUListElement>('[data-search-results]');
+    const empty = header.querySelector<HTMLElement>('[data-search-empty]');
+    const data: Item[] = JSON.parse(header.querySelector('[data-search-data]')?.textContent || '[]');
+    const render = () => {
+      if (!input || !results || !empty) return;
+      const q = input.value.trim().toLowerCase();
+      const found = q ? data.filter((i) => i.terms.includes(q)).slice(0, 8) : data.slice(0, 6);
+      results.replaceChildren(
+        ...found.map((i) => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = i.href;
+          const title = document.createElement('span');
+          title.className = 'sr-title';
+          title.textContent = i.title;
+          const meta = document.createElement('span');
+          meta.className = 'sr-meta';
+          meta.textContent = i.meta;
+          a.append(title, meta);
+          li.append(a);
+          return li;
+        }),
+      );
+      empty.hidden = found.length > 0;
+    };
+    input?.addEventListener('input', render, { signal });
+    render();
+
+    // Тема.
+    const syncTheme = () => {
+      const dark = document.documentElement.dataset.theme !== 'light';
+      header.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((b) => {
+        b.setAttribute('aria-label', (dark ? b.dataset.labelLight : b.dataset.labelDark) ?? '');
+      });
+    };
+    header.querySelectorAll('[data-theme-toggle]').forEach((b) =>
+      b.addEventListener(
+        'click',
+        () => {
+          const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+          document.documentElement.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch {}
+          document.dispatchEvent(new CustomEvent('themechange'));
+        },
+        { signal },
+      ),
+    );
+    document.addEventListener('themechange', syncTheme, { signal });
+    syncTheme();
+
+    // Мобильное меню.
+    const menuBtn = header.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const menu = header.querySelector<HTMLElement>('[data-mobile-menu]');
+    function setMenu(open: boolean) {
+      if (!menuBtn || !menu) return;
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute(
+        'aria-label',
+        (open ? menuBtn.dataset.labelClose : menuBtn.dataset.labelOpen) ?? '',
+      );
+      menu.hidden = !open;
+    }
+    menuBtn?.addEventListener('click', () => setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'), {
+      signal,
+    });
+    menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false), { signal }));
+  }
+
+  document.addEventListener('astro:page-load', setupHeader);
+</script>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 40;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: var(--header-h);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    color: var(--text);
+  }
+  .logo :global(.logo-mobile) {
+    display: none;
+  }
+
+  .nav {
+    display: flex;
+    gap: 32px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .nav a[aria-current='page'] {
+    color: var(--accent-ink);
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .popover-wrap {
+    position: relative;
+  }
+  .lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .lang-btn[aria-expanded='true'] {
+    background: var(--surface);
+  }
+  .lang-code {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+  .lang-btn :global(.chev) {
+    opacity: 0.6;
+  }
+
+  .popover {
+    position: absolute;
+    top: 52px;
+    right: 0;
+    z-index: 10;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow-pop);
+  }
+  .lang-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 200px;
+  }
+  .lang-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .lang-menu a[aria-checked='true'] {
+    background: var(--menu-active);
+  }
+  .lang-menu a:hover {
+    opacity: 1;
+    background: var(--menu-active);
+  }
+  .lang-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .lang-item-code {
+    width: 20px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .lang-menu :global(.check) {
+    color: var(--accent-ink);
+  }
+
+  .theme-toggle :global(.i-moon),
+  :global([data-theme='light']) .theme-toggle :global(.i-sun) {
+    display: none;
+  }
+  :global([data-theme='light']) .theme-toggle :global(.i-moon) {
+    display: block;
+  }
+
+  .search-panel {
+    width: 360px;
+    padding: 10px;
+  }
+  .search-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--line-2);
+    border-radius: 22px;
+    color: var(--muted);
+  }
+  .search-field input {
+    flex-grow: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+  }
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .search-results :global(a) {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+  .search-results :global(a:hover) {
+    opacity: 1;
+    background: var(--menu-active);
+  }
+  .search-results :global(.sr-title) {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .search-results :global(.sr-meta) {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .search-empty {
+    padding: 12px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+  .menu-toggle :global(.i-close),
+  .menu-toggle[aria-expanded='true'] :global(.i-menu) {
+    display: none;
+  }
+  .menu-toggle[aria-expanded='true'] :global(.i-close) {
+    display: block;
+  }
+
+  .mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 6px 14px 21px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.35);
+  }
+  .mobile-menu nav {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-menu nav a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 49px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+  .mobile-menu nav a[aria-current='page'] {
+    color: var(--accent-ink);
+  }
+  .mobile-menu nav :global(.chev) {
+    opacity: 0.5;
+  }
+  .mobile-lang {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .mobile-lang-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mobile-lang-options {
+    display: flex;
+    gap: 7px;
+  }
+  .mobile-lang-options a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 19px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .mobile-lang-options a[aria-current='true'] {
+    border-color: var(--accent-ink);
+    background: var(--menu-active);
+  }
+
+  @media (max-width: 1100px) {
+    .nav {
+      gap: 20px;
+    }
+  }
+  @media (max-width: 900px) {
+    .nav {
+      font-size: 12px;
+      gap: 16px;
+    }
+  }
+  @media (max-width: 767px) {
+    .logo :global(.logo-desktop),
+    .nav,
+    .lang-desktop,
+    .search-desktop {
+      display: none;
+    }
+    .logo :global(.logo-mobile) {
+      display: block;
+    }
+    .controls {
+      gap: 7px;
+    }
+    .menu-toggle {
+      display: inline-flex;
+    }
+  }
+  @media (min-width: 768px) {
+    .mobile-menu {
+      display: none !important;
+    }
+  }
+</style>

@@ -1,0 +1,10 @@
+---
+import Materials from '../views/Materials.astro';
+import Empty from '../views/Empty.astro';
+import { emptyKind } from '../lib/media';
+
+// Нет контента — вместо страницы показываем пустое состояние.
+const kind = await emptyKind('materials');
+---
+
+{kind ? <Empty lang="ru" kind={kind} active="materials" /> : <Materials lang="ru" />}

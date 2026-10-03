@@ -1,0 +1,341 @@
+---
+// «Об авторе»: биография, соцсети, «Чем занимаюсь», «Опыт», «Контакты».
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import { site } from '../site.config';
+import { localize, useT, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+
+// Порядок соцсетей как в макете страницы.
+const order = ['YouTube', 'Telegram', 'Discord', 'SoundCloud'];
+const socials = [...site.socials].sort((a, b) => order.indexOf(a.label) - order.indexOf(b.label));
+
+const doing = [
+  { title: t('about.music'), text: t('about.musicText'), short: t('about.musicShort') },
+  { title: t('about.content'), text: t('about.contentText'), short: t('about.contentShort') },
+  { title: t('about.label'), text: t('about.labelText'), short: t('about.labelShort') },
+  { title: t('about.games'), text: t('about.gamesText'), short: t('about.gamesShort') },
+];
+
+const experience = [
+  { year: '2020', title: t('about.exp1'), text: t('about.exp1Text') },
+  { year: t('about.year'), title: t('about.exp2'), text: t('about.exp2Text') },
+  { year: t('about.year'), title: t('about.exp3'), text: t('about.exp3Text') },
+  { year: t('about.year'), title: t('about.exp4'), text: t('about.exp4Text') },
+  { year: t('about.year'), title: t('about.exp5'), text: t('about.exp5Text') },
+  { year: '2026', title: t('about.exp6'), text: t('about.exp6Text') },
+];
+const email = site.email || '[email]';
+---
+
+<Base lang={lang} title={t('nav.bio')} active="bio">
+  <section class="container hero">
+    <div class="hero-text">
+      <div class="eyebrow">{t('nav.bio')}</div>
+      <h1 class="logo-name hero-name">Arkomiko</h1>
+      <p class="lead desktop-only">{t('about.lead')}</p>
+      <p class="lead mobile-only">{t('about.leadShort')}</p>
+      <p class="text-soft desktop-only">{t('about.bio')}</p>
+      <p class="text-soft mobile-only">{t('about.bioShort')}</p>
+      <Logo variant="line" size={194} label={t('logo.alt')} class="logo-mobile" />
+      <div class="socials">
+        {socials.map((s) => (
+          <a href={s.url} target="_blank" rel="me noopener">
+            {s.label}
+          </a>
+        ))}
+      </div>
+    </div>
+    <Logo variant="line" size={420} label={t('logo.alt')} class="logo-desktop" />
+  </section>
+
+  <section class="section">
+    <div class="container block">
+      <h2 class="h2">{t('about.doing')}</h2>
+      <div class="doing">
+        {doing.map((d) => (
+          <div class="card doing-card">
+            <h3 class="h3">{d.title}</h3>
+            <p class="desktop-only">{d.text}</p>
+            <p class="mobile-only">{d.short}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container block exp">
+      <div class="exp-intro">
+        <h2 class="h2">{t('about.experience')}</h2>
+        <p class="desktop-only">{t('about.experienceText')}</p>
+      </div>
+      <ol class="timeline">
+        {experience.map((e) => (
+          <li>
+            <div class="year">{e.year}</div>
+            <div class="exp-body">
+              <div class="exp-title">{e.title}</div>
+              <div class="exp-text">{e.text}</div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section id="contacts" class="section">
+    <div class="container block contacts">
+      <div class="contacts-text">
+        <h2 class="h2">{t('about.contacts')}</h2>
+        <p class="text-soft">
+          {t('about.contactsText')} {site.email ? <a href={`mailto:${site.email}`}>{email}</a> : email}
+        </p>
+      </div>
+      <a href={localize('/music', lang)} class="btn btn-primary">
+        {t('home.library')}
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 96px;
+    padding-block: 80px;
+  }
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .hero-name {
+    font-size: 128px;
+  }
+  .hero-text p {
+    max-width: 680px;
+  }
+  .hero-text .text-soft {
+    line-height: 1.65;
+  }
+  .hero :global(.logo-desktop) {
+    flex-shrink: 0;
+    width: clamp(240px, 30vw, 420px);
+    height: auto;
+    color: var(--text);
+  }
+  .hero :global(.logo-mobile),
+  .mobile-only {
+    display: none;
+  }
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .socials a {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding: 0 20px;
+    border: 1px solid var(--line-2);
+    border-radius: 22px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .block {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-block: 56px 72px;
+  }
+  .doing {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .doing-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+  }
+  .doing-card p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .exp {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    gap: 64px;
+  }
+  .exp-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .exp-intro p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .timeline {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+  .timeline li {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 32px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .year {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--accent-ink);
+  }
+  .exp-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .exp-title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .exp-text {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .contacts {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .contacts-text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .contacts-text a {
+    color: var(--accent-ink);
+  }
+
+  @media (max-width: 1199px) {
+    .hero {
+      gap: 56px;
+    }
+    .hero-name {
+      font-size: 104px;
+    }
+    .doing {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .exp {
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 40px;
+    }
+  }
+  @media (max-width: 767px) {
+    .desktop-only,
+    .hero :global(.logo-desktop) {
+      display: none;
+    }
+    .mobile-only {
+      display: block;
+    }
+    .hero {
+      padding-block: 25px 28px;
+    }
+    .hero-text {
+      gap: 16px;
+    }
+    .hero-name {
+      font-size: 56px;
+      line-height: 0.95;
+    }
+    .hero :global(.logo-mobile) {
+      display: block;
+      align-self: center;
+      margin-block: 6px;
+      color: var(--text);
+    }
+    .socials {
+      gap: 7px;
+      margin-top: 0;
+    }
+    .socials a {
+      height: 40px;
+      padding: 0 14px;
+      border-color: var(--line);
+      border-radius: 19px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .block {
+      gap: 12px;
+      padding-block: 22px 28px;
+    }
+    .doing {
+      gap: 9px;
+    }
+    .doing-card {
+      gap: 7px;
+      padding: 14px;
+    }
+    .doing-card .h3 {
+      font-size: 12px;
+    }
+    .doing-card p {
+      font-size: 11px;
+      line-height: 1.5;
+    }
+    .exp {
+      display: flex;
+      gap: 12px;
+    }
+    .timeline li {
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 11px;
+      padding: 12px 0;
+    }
+    .year {
+      font-size: 11px;
+    }
+    .exp-title {
+      font-size: 13px;
+    }
+    .exp-text {
+      display: none;
+    }
+    .contacts {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .contacts-text {
+      gap: 12px;
+    }
+  }
+</style>
