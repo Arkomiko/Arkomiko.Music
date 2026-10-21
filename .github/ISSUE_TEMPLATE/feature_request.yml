@@ -1,0 +1,29 @@
+name: Предложение
+description: Улучшение кода или документации.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: Изменения дизайна, палитры, логотипа и иллюстраций не рассматриваются. Подробнее — в CONTRIBUTING.md.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Какую задачу это решает
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Предлагаемое решение
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Рассмотренные альтернативы
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: Участие
+      options:
+        - label: Готов(а) сделать pull request

@@ -7,7 +7,7 @@ import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { site, type ReleaseLicense } from '../site.config';
 import type { PlayerTrack } from '../stores/player';
-import type { Lang } from '../i18n';
+import type { Lang } from './lang';
 
 /** RLS — релизы и пред-релизы, DR — черновики (папки в contents_user/traks/). */
 export type Section = 'RLS' | 'DR';
@@ -24,10 +24,11 @@ const covers = import.meta.glob<{ default: ImageMetadata }>(
   ['/contents_user/traks/*/*/cover.{jpg,jpeg,png,webp}', '/contents_user/pack/*/*/cover.{jpg,jpeg,png,webp}'],
   { eager: true },
 );
-const audio = import.meta.glob<string>(
-  ['/contents_user/traks/*/*/tracks/*.mp3', '/contents_user/pack/*/*/preview.mp3'],
-  { eager: true, query: '?url', import: 'default' },
-);
+const audio = import.meta.glob<string>('/contents_user/traks/*/*/tracks/*.mp3', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
 
 // Шаблонные обложки (src/assets/placeholders): Track — релизы и пред-релизы, Draft — черновики, Samples — материалы.
 // В каждой папке два варианта: с подписью («Трек», «Черновик», «Сэмпл-пак») и без неё (no-text).
@@ -106,6 +107,9 @@ export type Item = {
   status: Status;
   composition: 'original' | 'cover' | 'remix';
   genre?: string;
+  language?: string;
+  label?: string;
+  upc?: string;
   bpm?: number;
   key?: string;
   tags: string[];
@@ -171,12 +175,20 @@ async function buildItem(section: Section, entry: Entry, slug: string): Promise<
     status: data.status,
     composition: data.composition,
     genre: data.genre,
+    language: data.language,
+    label: data.label,
+    upc: data.upc,
     bpm: data.bpm ?? tracks.find((t) => t.bpm)?.bpm,
     key: data.key,
     tags: data.tags,
     covers: coversFor(dir, entry.id, data.status === 'draft' ? 'Draft' : 'Track', data.placeholder),
     links: Object.entries(data.links),
-    license: { ...site.license, ...data.license },
+    // Техно-демки и черновики (DR) — CC BY-NC-SA 4.0, остальное — Arkomiko Music License; release.md может перекрыть.
+    license: {
+      ...(section === 'DR' || data.kind === 'techno-demo' ? site.licenses.demo : site.licenses.music),
+      ...data.license,
+      credit: data.license?.credit ?? `Music: Arkomiko — ${data.title}`,
+    },
     download: data.download,
     tracks,
   };
@@ -264,7 +276,8 @@ export type Pack = {
   entry: CollectionEntry<'pack'>;
   date: Date;
   covers: Covers;
-  preview?: string;
+  /** Лицензия пака: Free, Standard или Extended (contents_user/licenses/). */
+  license: 'free' | 'standard' | 'extended';
 };
 
 export async function getPacks(): Promise<Pack[]> {
@@ -282,7 +295,7 @@ export async function getPacks(): Promise<Pack[]> {
           entry,
           date: toDate(entry.data.date).date,
           covers: coversFor(dir, slug, 'Samples', entry.data.placeholder),
-          preview: audio[dir + 'preview.mp3'],
+          license: entry.data.license ?? (entry.data.price === 'free' ? 'free' : 'standard'),
         },
       ];
     })

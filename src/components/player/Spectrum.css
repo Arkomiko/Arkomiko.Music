@@ -1,0 +1,19 @@
+/* Спектрометр: canvas в закруглённой рамке. */
+
+/* Закруглённая рамка вокруг спектра */
+.spectrum-frame {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 6px 12px 0; /* снизу без отступа: столбики стоят на кромке рамки */
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+}
+.spectrum {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}

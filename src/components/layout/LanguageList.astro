@@ -1,0 +1,43 @@
+---
+// Список языков с флагами: всплывающее меню в шапке (menu) и сетка в мобильном меню (grid).
+// Ссылка ведёт на ту же страницу на другом языке; выбор запоминается (Header.client.ts → localStorage 'lang').
+import Flag from '../ui/Flag.astro';
+import Icon from '../ui/Icon.astro';
+import { languages, localize, type Lang } from '../../lib/lang';
+
+interface Props {
+  /** Язык текущей страницы — отмечается галочкой. */
+  lang: Lang;
+  /** Путь страницы без языкового префикса: /about, /release/4wio. */
+  path: string;
+  variant: 'menu' | 'grid';
+}
+const { lang, path, variant } = Astro.props;
+const menu = variant === 'menu';
+---
+
+<div class:list={['languages', variant]}>
+  {languages.map((l) => (
+    <a
+      class="language"
+      href={localize(path, l.code)}
+      hreflang={l.code}
+      lang={l.code}
+      title={l.nameEn}
+      data-lang-link={l.code}
+      role={menu ? 'menuitemradio' : undefined}
+      aria-checked={menu ? (l.code === lang ? 'true' : 'false') : undefined}
+      aria-current={!menu && l.code === lang ? 'true' : undefined}
+    >
+      <span class="name">
+        <Flag lang={l.code} size={menu ? 20 : 18} />
+        <span dir={l.dir}>{l.name}</span>
+      </span>
+      {menu && l.code === lang && <Icon name="check" size={16} class="check" />}
+    </a>
+  ))}
+</div>
+
+<style>
+  @import './LanguageList.css';
+</style>

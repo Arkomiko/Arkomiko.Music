@@ -1,0 +1,194 @@
+Arkomiko.Music Code License 1.0
+Лицензия на код Arkomiko.Music, версия 1.0
+
+Copyright (c) 2026 Arkomiko
+
+Русская версия является основной. An English translation follows below;
+in case of discrepancies the Russian version prevails.
+
+====================================================================
+РУССКАЯ ВЕРСИЯ
+====================================================================
+
+1. ТЕРМИНЫ
+
+«Автор» — Arkomiko (творческий псевдоним), правообладатель Кода.
+
+«Код» — исходный код этого репозитория: файлы в src/, .vscode/, .github/
+и файлы конфигурации в корне репозитория, за исключением Материалов автора.
+
+«Материалы автора» — всё, что перечислено в файле NOTICE.md как не входящее
+в эту лицензию: имя и псевдоним Arkomiko, логотип, маскот, иллюстрации,
+иконки вкладки, шаблонные обложки, графика документации, музыка, обложки
+релизов, тексты и иной контент из папки contents_user/.
+
+«Свой проект» — сайт или страница физического лица, на которых это лицо
+публикует собственные произведения (музыку, графику, видео, тексты)
+и сведения о себе, в том числе если оно продаёт свои произведения
+или принимает пожертвования.
+
+«Производная работа» — Код с изменениями, а также Код или его части
+в составе другого программного кода.
+
+2. ЧТО РАЗРЕШЕНО
+
+Автор безвозмездно предоставляет неисключительное право использовать Код
+по всему миру на весь срок действия авторского права, а именно:
+
+  а) изучать и запускать Код;
+  б) изменять Код и создавать Производные работы;
+  в) публиковать на основе Кода и Производных работ Свой проект;
+  г) распространять Код и Производные работы безвозмездно, вместе
+     с исходным кодом и на условиях этой же лицензии.
+
+3. ОБЯЗАТЕЛЬНЫЕ УСЛОВИЯ
+
+  а) Во всех копиях Кода и Производных работ сохраняются этот файл LICENSE
+     и файл NOTICE.md. Строку copyright Автора удалять и изменять нельзя;
+     свою строку copyright можно добавить ниже.
+
+  б) На каждой странице опубликованного Своего проекта, в подвале,
+     размещается видимая подпись со ссылкой на репозиторий
+     https://github.com/Arkomiko/Arkomiko.Music:
+       на русском:     «Работает на Astro и Vue. Создано на основе репозитория Arkomiko»;
+       на английском:  «Works on Astro and Vue. Built on the Arkomiko repo».
+     Размер и оформление подписи — на усмотрение, но она должна быть читаемой.
+
+  в) До публикации Своего проекта все Материалы автора заменяются своими.
+     Перечень — в NOTICE.md и Git-And-Docks/RU-ru/USAGE.md.
+
+4. ЧТО ЗАПРЕЩЕНО
+
+  а) Продавать, сдавать в аренду, сублицензировать Код и Производные работы,
+     в том числе как шаблон, тему, конструктор сайтов или часть платного продукта.
+  б) Использовать Код для оказания платных услуг другим лицам: создания,
+     настройки или поддержки сайтов на заказ, хостинга, маркетплейсов шаблонов.
+  в) Использовать Код в проектах организаций (лейблов, студий, компаний)
+     без письменного разрешения Автора.
+  г) Использовать Материалы автора иначе, чем разрешено в NOTICE.md.
+  д) Выдавать Свой проект за проект Arkomiko или создавать впечатление,
+     что он связан с Автором или одобрен им.
+
+5. СТОРОННИЕ КОМПОНЕНТЫ
+
+Astro, Vue и другие зависимости распространяются по лицензиям своих авторов.
+Эта лицензия на них не распространяется и не ограничивает права,
+которые дают их лицензии. Она действует только на код, написанный Автором.
+
+6. ВКЛАД В ПРОЕКТ
+
+Отправляя изменения в репозиторий (pull request), участник предоставляет
+Автору неисключительное, бессрочное и безотзывное право использовать,
+изменять и распространять свой вклад на любых условиях, включая эту лицензию.
+
+7. ПРЕКРАЩЕНИЕ
+
+Права по этой лицензии прекращаются при нарушении её условий. Если нарушение
+устранено в течение 30 дней после уведомления от Автора, права восстанавливаются.
+
+8. ОТКАЗ ОТ ГАРАНТИЙ И ОТВЕТСТВЕННОСТИ
+
+Код предоставляется «как есть», без каких-либо гарантий, явных или
+подразумеваемых. Автор не несёт ответственности за любой ущерб, возникший
+в связи с использованием Кода, в пределах, допускаемых применимым правом.
+
+9. ПРОЧЕЕ
+
+Если какое-либо условие лицензии признано недействительным по применимому
+праву, остальные условия сохраняют силу. Права сверх этой лицензии, в том
+числе коммерческое использование Кода, предоставляются только по отдельному
+письменному соглашению. Связь: Arkomiko.Music@gmail.com.
+
+====================================================================
+ENGLISH VERSION (translation)
+====================================================================
+
+1. DEFINITIONS
+
+"Author" means Arkomiko (a creative pseudonym), the copyright holder of the Code.
+
+"Code" means the source code of this repository: files in src/, .vscode/,
+.github/ and configuration files in the repository root, excluding the
+Author's Materials.
+
+"Author's Materials" means everything listed in NOTICE.md as not covered by
+this license: the name and pseudonym Arkomiko, the logo, the mascot,
+illustrations, favicons, placeholder covers, documentation graphics, music,
+release artwork, texts and any other content in the contents_user/ folder.
+
+"Own Project" means a website or page of an individual on which that
+individual publishes their own works (music, artwork, video, texts) and
+information about themselves, including when they sell their own works or
+accept donations.
+
+"Derivative Work" means the Code with modifications, as well as the Code or
+parts of it included in other software.
+
+2. PERMISSIONS
+
+The Author grants a free, non-exclusive, worldwide license for the full term
+of copyright to:
+
+  a) study and run the Code;
+  b) modify the Code and create Derivative Works;
+  c) publish an Own Project based on the Code and Derivative Works;
+  d) distribute the Code and Derivative Works free of charge, together with
+     the source code and under this same license.
+
+3. CONDITIONS
+
+  a) All copies of the Code and Derivative Works must keep this LICENSE file
+     and the NOTICE.md file. The Author's copyright line must not be removed
+     or changed; you may add your own copyright line below it.
+
+  b) Every page of a published Own Project must show, in the footer, a visible
+     credit linking to https://github.com/Arkomiko/Arkomiko.Music:
+       in English: "Works on Astro and Vue. Built on the Arkomiko repo";
+       in Russian: «Работает на Astro и Vue. Создано на основе репозитория Arkomiko».
+     Size and styling are up to you, but the credit must be legible.
+
+  c) All Author's Materials must be replaced with your own before an Own
+     Project is published. See NOTICE.md and Git-And-Docks/RU-ru/USAGE.md.
+
+4. RESTRICTIONS
+
+  a) You may not sell, rent, lease or sublicense the Code or Derivative Works,
+     including as a template, theme, site builder or part of a paid product.
+  b) You may not use the Code to provide paid services to others: building,
+     configuring or maintaining websites to order, hosting, template marketplaces.
+  c) You may not use the Code in projects of organizations (labels, studios,
+     companies) without the Author's written permission.
+  d) You may not use the Author's Materials except as permitted in NOTICE.md.
+  e) You may not present your Own Project as a project of Arkomiko or imply
+     that it is affiliated with or endorsed by the Author.
+
+5. THIRD-PARTY COMPONENTS
+
+Astro, Vue and other dependencies are distributed under the licenses of their
+authors. This license does not apply to them and does not limit the rights
+their licenses grant. It applies only to code written by the Author.
+
+6. CONTRIBUTIONS
+
+By submitting changes to the repository (a pull request), a contributor grants
+the Author a non-exclusive, perpetual and irrevocable right to use, modify and
+distribute the contribution under any terms, including this license.
+
+7. TERMINATION
+
+Your rights under this license terminate if you breach its conditions. If the
+breach is cured within 30 days of notice from the Author, your rights are
+reinstated.
+
+8. DISCLAIMER OF WARRANTY AND LIABILITY
+
+The Code is provided "as is", without warranty of any kind, express or implied.
+To the extent permitted by applicable law, the Author is not liable for any
+damages arising in connection with the use of the Code.
+
+9. MISCELLANEOUS
+
+If any provision of this license is held invalid under applicable law, the
+remaining provisions remain in effect. Rights beyond this license, including
+commercial use of the Code, are granted only under a separate written
+agreement. Contact: Arkomiko.Music@gmail.com.

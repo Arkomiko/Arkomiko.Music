@@ -1,0 +1,33 @@
+---
+// Круглый флаг языка (lib/flags.ts). Нет флага — глобус.
+import Icon from './Icon.astro';
+import { flagUrl } from '../../lib/flags';
+
+interface Props {
+  lang: string;
+  size?: number;
+  /** true — грузить сразу (кнопка в шапке); иначе — когда список языков откроют. */
+  eager?: boolean;
+  class?: string;
+}
+const { lang, size = 20, eager = false, class: className } = Astro.props;
+const src = flagUrl(lang);
+---
+
+{src ? (
+  <img
+    class:list={['flag', className]}
+    src={src}
+    alt=""
+    width={size}
+    height={size}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+  />
+) : (
+  <Icon name="globe" size={size} class={className} />
+)}
+
+<style>
+  @import './Flag.css';
+</style>

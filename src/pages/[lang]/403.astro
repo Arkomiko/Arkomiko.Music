@@ -1,0 +1,10 @@
+---
+// Страница для всех языков, кроме основного: /en/…, /de/…, /ja/… (список — languages/*.ts).
+import { langPaths } from '../../lib/lang';
+import ErrorPage from '../../views/system/ErrorPage.astro';
+
+export const getStaticPaths = langPaths;
+const { lang } = Astro.props;
+---
+
+<ErrorPage lang={lang} code={403} />

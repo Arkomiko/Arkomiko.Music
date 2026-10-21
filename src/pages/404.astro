@@ -1,7 +1,7 @@
 ---
 // Страница 404 одна на весь сайт, поэтому язык определяем по адресу, который не нашёлся.
-import ErrorPage from '../views/ErrorPage.astro';
-import { langFromPath } from '../i18n';
+import ErrorPage from '../views/system/ErrorPage.astro';
+import { langFromPath } from '../lib/lang';
 ---
 
 <ErrorPage lang={langFromPath(Astro.url.pathname)} code={404} />

@@ -1,0 +1,66 @@
+/* Список языков: флаг + название на самом языке. */
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* Всплывающее меню в шапке: столбик, текущий язык подсвечен и отмечен галочкой. */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.menu .language {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.menu .language[aria-checked='true'],
+.menu .language:hover {
+  opacity: 1;
+  background: var(--menu-active);
+}
+.menu :global(.check) {
+  flex: none;
+  color: var(--accent-ink);
+}
+
+/* Мобильное меню: сетка в два столбца из пилюль. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+.grid .language {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.grid .name {
+  gap: 7px;
+}
+.grid .name span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.grid .language[aria-current='true'] {
+  border-color: var(--accent-ink);
+  background: var(--menu-active);
+}

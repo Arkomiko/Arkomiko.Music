@@ -1,0 +1,10 @@
+---
+// Страница для всех языков, кроме основного: /en/…, /de/…, /ja/… (список — languages/*.ts).
+import { langPaths } from '../../lib/lang';
+import Empty from '../../views/system/Empty.astro';
+
+export const getStaticPaths = langPaths;
+const { lang } = Astro.props;
+---
+
+<Empty lang={lang} kind="content" standalone />

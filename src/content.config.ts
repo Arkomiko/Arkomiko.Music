@@ -26,6 +26,12 @@ const track = {
   status,
   composition: z.enum(['original', 'cover', 'remix']).default('original'),
   genre: z.string().optional(),
+  language: z.string().optional(), // язык названия релиза: код ISO 639-1 (en, ru, ja) или название
+  label: z.string().optional(), // лейбл / копирайт
+  upc: z.coerce
+    .string()
+    .regex(/^\d{12,14}$/, 'UPC/EAN — 12–14 цифр')
+    .optional(), // в кавычках, чтобы не потерять ведущие нули
   bpm: z.number().optional(),
   key: z.string().optional(), // «A minor»
   tags: z.array(z.string()).default([]),
@@ -36,6 +42,8 @@ const track = {
   links: z.record(z.string(), z.string().url()).default({}),
   license: z
     .object({
+      name: z.string(), // «Условия лейбла …», «CC BY-NC-SA 4.0»
+      url: z.string(),
       streams: permission,
       monetization: permission,
       remixes: permission,
@@ -69,13 +77,14 @@ const pack = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.union([z.number().int(), z.coerce.date()]),
-    count: z.number().int().optional(),
+    count: z.number().int().optional(), // сэмплов, пресетов, проектов или файлов — по типу папки
     bpm: z.string().optional(),
     key: z.string().optional(),
     genre: z.string().optional(),
     format: z.string().optional(), // «WAV 24-bit», «FL Studio 21», «Serum»
     tags: z.array(z.string()).default([]),
     price: z.string().default('free'), // 'free' или цена строкой
+    license: z.enum(['free', 'standard', 'extended']).optional(), // без поля: free для бесплатных, иначе standard
     download: z.string().url().optional(),
     placeholder,
     draft: z.boolean().default(false),
@@ -86,6 +95,7 @@ const licenses = defineCollection({
   loader: glob({ pattern: '*.md', base: './contents_user/licenses' }),
   schema: z.object({
     title: z.string(),
+    group: z.enum(['music', 'pack']), // музыка (релизы, демо) или материалы (сэмплы, пресеты, проекты)
     order: z.number().default(0),
     price: z.string().optional(),
   }),

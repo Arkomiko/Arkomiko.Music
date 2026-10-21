@@ -4,4 +4,12 @@ dist/
 .DS_Store
 
 # Треки пока не публикуются: на GitHub — макет без контента.
-contents_user/traks/
+# Шаблоны релизов (.template-content) публикуются: сайт их не читает.
+contents_user/traks/*
+!contents_user/traks/.template-content/
+
+# Переводы публикуются, когда готовы: пока в репозитории только русский и английский.
+# Заготовки остальных языков лежат локально; готовый язык — добавить сюда строку-исключение.
+languages/*.ts
+!languages/RU-ru.ts
+!languages/EN-en.ts

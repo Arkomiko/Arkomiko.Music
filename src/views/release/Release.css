@@ -1,0 +1,365 @@
+/* Страница релиза: шапка с обложкой (фон — размытая обложка), треклист, теги, площадки,
+ * справа — лицензия и «О релизе». */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+.hero :global(.hero-bg) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: var(--cover-blur-opacity);
+  filter: blur(24px);
+  transform: scale(1.1);
+}
+.hero-inner {
+  position: relative;
+  display: flex;
+  gap: 56px;
+  align-items: flex-start;
+  padding-block: 64px;
+}
+.hero :global(.cover) {
+  flex-shrink: 0;
+  width: 512px;
+  height: 512px;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  min-width: 0;
+  min-height: 512px;
+}
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.kicker {
+  font-size: 13px;
+  line-height: 1;
+}
+.artist {
+  font-size: 44px;
+  line-height: 1;
+}
+.title {
+  margin-top: 14px;
+}
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.cells {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.cell dd {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+    'tracks license'
+    'tags license'
+    'listen license';
+  column-gap: 72px;
+  padding-block: 64px;
+}
+.part {
+  display: flex;
+  flex-direction: column;
+}
+.part-title {
+  font-size: 28px;
+}
+.part-label {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+.tracks {
+  grid-area: tracks;
+  gap: 24px;
+}
+.tags-block {
+  grid-area: tags;
+  gap: 14px;
+  margin-top: 32px;
+}
+.listen {
+  grid-area: listen;
+  gap: 14px;
+  margin-top: 32px;
+}
+.side {
+  grid-area: license;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-self: start;
+}
+.license,
+.about {
+  gap: 20px;
+}
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hint {
+  font-size: 13px;
+  color: var(--muted);
+}
+.platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.platforms a {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.facts-card {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 28px;
+}
+.facts-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+}
+.facts-row:last-child {
+  border-bottom: 0;
+}
+.facts-value {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  text-align: end;
+}
+.facts-value a {
+  color: var(--accent-ink);
+}
+.facts-value.select {
+  user-select: all; /* UPC выделяется целиком одним нажатием */
+}
+.facts-value.fill {
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.full-license {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+@media (max-width: 1199px) {
+  .hero-inner {
+    gap: 40px;
+  }
+  .hero :global(.cover) {
+    width: 380px;
+    height: 380px;
+  }
+  .info {
+    min-height: 380px;
+    gap: 24px;
+  }
+  .cells {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .body {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    column-gap: 40px;
+  }
+}
+@media (max-width: 959px) {
+  .h1.title {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    border-bottom: 0;
+  }
+  .hero :global(.hero-bg) {
+    display: none;
+  }
+  .hero-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding-block: 12px 25px;
+  }
+  .hero :global(.cover) {
+    width: 90%;
+    height: auto;
+    aspect-ratio: 1;
+    align-self: center;
+  }
+  .info {
+    min-height: 0;
+    justify-content: flex-start;
+    gap: 14px;
+  }
+  .top,
+  .bottom {
+    display: contents;
+  }
+  .kicker {
+    order: 1;
+    font-size: 11px;
+  }
+  .title {
+    order: 2;
+    margin: 0;
+  }
+  .artist {
+    order: 3;
+    font-size: 28px;
+  }
+  .cells {
+    order: 4;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+  .cell {
+    gap: 4px;
+    padding: 11px;
+  }
+  .cell dt {
+    font-size: 9px;
+  }
+  .cell dd {
+    font-size: 13px;
+  }
+  .actions {
+    order: 5;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  .part {
+    gap: 11px;
+    margin: 0;
+    padding: 18px 14px 25px;
+    border-top: 1px solid var(--line);
+  }
+  .tags-block {
+    order: 1;
+  }
+  .tracks {
+    order: 2;
+  }
+  .listen {
+    order: 3;
+  }
+  .side {
+    display: contents;
+  }
+  .license {
+    order: 4;
+  }
+  .about {
+    order: 5;
+  }
+  .license,
+  .about {
+    gap: 12px;
+    align-self: stretch;
+  }
+  .part-title {
+    font-size: 23px;
+  }
+  .part-label {
+    font-size: 10px;
+  }
+  .tag-list,
+  .platforms {
+    gap: 7px;
+  }
+  .hint {
+    display: none;
+  }
+  .platforms a {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 19px;
+    font-size: 11px;
+  }
+  .facts-card {
+    padding: 4px 14px;
+  }
+  .facts-row {
+    height: 42px;
+    font-size: 12px;
+  }
+  .facts-value {
+    font-size: 10px;
+  }
+  .facts-value.fill {
+    padding: 4px 9px;
+  }
+  .full-license {
+    font-size: 11px;
+  }
+}

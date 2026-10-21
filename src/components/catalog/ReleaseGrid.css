@@ -1,0 +1,87 @@
+/* «Последние релизы»: заголовок с фильтрами и сетка обложек (5 → 4 → 3 → 2 колонки). */
+
+.releases {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.card-link {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cover {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+.more {
+  align-self: center;
+}
+
+@media (max-width: 1199px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 959px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  .releases {
+    gap: 16px;
+  }
+  .filters {
+    display: none;
+  }
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 11px;
+  }
+  .card-link {
+    gap: 9px;
+  }
+  .text {
+    gap: 2px;
+  }
+  .title {
+    font-size: 12px;
+  }
+  .meta {
+    font-size: 11px;
+  }
+  .more {
+    align-self: stretch;
+  }
+}

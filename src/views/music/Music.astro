@@ -1,0 +1,39 @@
+---
+// «Музыка»: полный список треков (contents_user/traks/RLS и DR) с фильтром по статусу.
+import Base from '../../layouts/Base.astro';
+import TrackTable from '../../components/player/TrackTable.vue';
+import { getLibrary } from '../../lib/media';
+import { clientKeys, localize, strings, useT, type Lang } from '../../lib/lang';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const library = await getLibrary();
+---
+
+<Base lang={lang} title={t('tracks.title')} description={t('tracks.lead')} active="music">
+  <section class="container intro">
+    <div class="eyebrow">{t('tracks.eyebrow')}</div>
+    <h1 class="h1">{t('tracks.title')}</h1>
+    <p class="lead">{t('tracks.lead')}</p>
+    <p class="text-soft">
+      {t('tracks.text')}{' '}
+      <a href={localize('/licenses', lang)} class="link">
+        {t('nav.licenses')}
+      </a>
+    </p>
+    <div class="mono-label">{t('tracks.count', { n: library.length })}</div>
+  </section>
+
+  <section class="section">
+    <div class="container block">
+      <TrackTable client:load tracks={library} lang={lang} t={strings(lang, clientKeys.trackTable)} filters />
+    </div>
+  </section>
+</Base>
+
+<style>
+  @import './Music.css';
+</style>

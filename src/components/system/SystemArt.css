@@ -1,0 +1,27 @@
+/* Иллюстрация системной страницы: видео или SVG, своя версия для каждой темы. */
+
+.system-art {
+  display: flex;
+  justify-content: center;
+}
+.art {
+  width: min(320px, 70vw);
+  height: auto;
+}
+.fallback {
+  display: none;
+}
+.system-art:global(.no-alpha) video {
+  display: none;
+}
+.system-art:global(.no-alpha) .fallback {
+  display: block;
+}
+@media (prefers-reduced-motion: reduce) {
+  video {
+    display: none;
+  }
+  .fallback {
+    display: block;
+  }
+}

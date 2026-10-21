@@ -1,0 +1,35 @@
+name: release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Версия тега совпадает с package.json
+        run: |
+          PKG="v$(node -p "require('./package.json').version")"
+          if [ "$PKG" != "$GITHUB_REF_NAME" ]; then
+            echo "Тег $GITHUB_REF_NAME не совпадает с версией в package.json ($PKG)"
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - name: Релиз на GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PRE=""
+          case "$GITHUB_REF_NAME" in v0.*) PRE="--prerelease";; esac
+          gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes --verify-tag $PRE

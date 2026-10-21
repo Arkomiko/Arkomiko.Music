@@ -1,0 +1,15 @@
+---
+// Страница для всех языков, кроме основного: /en/…, /de/…, /ja/… (список — languages/*.ts).
+import { langPaths } from '../../lib/lang';
+import Home from '../../views/home/Home.astro';
+import Empty from '../../views/system/Empty.astro';
+import { emptyKind } from '../../lib/media';
+
+// Нет контента — вместо страницы показываем пустое состояние.
+const kind = await emptyKind('home');
+
+export const getStaticPaths = langPaths;
+const { lang } = Astro.props;
+---
+
+{kind ? <Empty lang={lang} kind={kind} active="home" /> : <Home lang={lang} />}

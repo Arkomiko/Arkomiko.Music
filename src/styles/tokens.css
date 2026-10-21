@@ -1,0 +1,67 @@
+/* Дизайн-токены из макета (Arkomiko-design/HANDOFF.md): цвета обеих тем, шрифты, размеры.
+ * Меняешь здесь — меняется весь сайт. Тема — атрибут data-theme на <html> (ставит скрипт в Base.astro). */
+
+:root {
+  /* Тёмная тема — по умолчанию */
+  --bg: #0b0a0d;
+  --surface: #141118;
+  --surface-2: #1c1822;
+  --line: #26222b;
+  --line-2: #3a3442;
+  --text: #f4f1f7;
+  --muted: #9a94a3;
+  --soft: #c9c3d1;
+  --track: #2a2530;
+  --accent: #ffc7ec; /* заливки кнопок и плашек */
+  --accent-ink: #ffc7ec; /* розовый текст и ссылки */
+  --on-accent: #151217; /* текст на розовой заливке */
+  --logo-eye: #ff93da;
+  --row-active: #141118;
+  --menu-active: #1c1822;
+  --cover-blur-opacity: 0.18;
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, 0.28);
+
+  --font-logo: 'Halfomania', 'Unbounded Variable', sans-serif;
+  --font-display: 'Unbounded Variable', 'Arial Black', sans-serif;
+  --font-body: 'Manrope Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --container: 1440px;
+  --pad: 64px; /* поля страницы: 64 десктоп, 14 мобильный */
+  --header-h: 80px;
+  --player-space: 96px; /* место под нижний плеер */
+  --radius: 4px;
+
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #faf7fa;
+  --surface: #ffffff;
+  --surface-2: #efe9f1;
+  --line: #e4dde7;
+  --line-2: #cfc6d3;
+  --text: #151217;
+  --muted: #6b6472;
+  --soft: #3c3642;
+  --track: #e4dde7;
+  --accent-ink: #b3307c;
+  --logo-eye: #b3307c;
+  --row-active: #f3edf5;
+  --menu-active: #f3edf5;
+  --cover-blur-opacity: 0.12;
+  color-scheme: light;
+}
+
+@media (max-width: 1199px) {
+  :root {
+    --pad: 32px;
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --pad: 14px;
+    --header-h: 56px;
+    --player-space: 70px;
+  }
+}

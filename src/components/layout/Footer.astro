@@ -1,0 +1,37 @@
+---
+import { site } from '../../site.config';
+import { localize, useT, type Lang } from '../../lib/lang';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<footer class="site-footer section">
+  <div class="container inner">
+    <nav aria-label="Footer">
+      {site.socials.map((s) => (
+        <a href={s.url} target="_blank" rel="me noopener">
+          {s.label}
+        </a>
+      ))}
+      <a href={localize('/licenses', lang)}>{t('nav.licenses')}</a>
+      <a href={localize('/about#contacts', lang)}>{t('nav.contacts')}</a>
+    </nav>
+    <div class="copy">
+      <div>
+        © {new Date().getFullYear()} {site.name}
+      </div>
+      <!-- Подпись, обязательная по лицензии кода (LICENSE, раздел 3). -->
+      <p class="template-credit">
+        {t('footer.credit')} <a href="https://github.com/Arkomiko/Arkomiko.Music">{t('footer.creditLink')}</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  @import './Footer.css';
+</style>

@@ -1,0 +1,170 @@
+---
+// Шапка сайта: логотип, меню разделов, выбор языка (флаг), тема, поиск; на телефоне — мобильное меню.
+// Поведение (всплывающие окна, поиск, тема, мобильное меню) — Header.client.ts, стили — Header.css,
+// правки для письма справа налево — Header.rtl.css.
+import Logo from '../ui/Logo.astro';
+import Icon from '../ui/Icon.astro';
+import Flag from '../ui/Flag.astro';
+import LanguageList from './LanguageList.astro';
+import { localize, stripLang, useT, type Lang } from '../../lib/lang';
+import { getCatalog, getPacks } from '../../lib/media';
+
+export type NavKey = 'home' | 'music' | 'materials' | 'bio' | 'licenses';
+
+interface Props {
+  lang: Lang;
+  /** Подсвеченный пункт меню. */
+  active?: NavKey;
+}
+const { lang, active } = Astro.props;
+const t = useT(lang);
+const path = stripLang(Astro.url.pathname);
+
+const nav: { key: NavKey; href: string; label: string }[] = [
+  { key: 'home', href: '/', label: t('nav.homePage') },
+  { key: 'music', href: '/music', label: t('nav.music') },
+  { key: 'materials', href: '/materials', label: t('nav.materials') },
+  { key: 'bio', href: '/about', label: t('nav.bio') },
+  { key: 'licenses', href: '/licenses', label: t('nav.licenses') },
+];
+
+// Данные для поиска (ищет Header.client.ts): треки и материалы — название, тип, ссылка, слова для поиска.
+const catalog = await getCatalog();
+const packs = await getPacks();
+const searchData = [
+  ...catalog.map((i) => ({
+    title: i.title,
+    meta: [t(`kind.${i.kind}`), i.genre, i.date.getUTCFullYear()].filter(Boolean).join(' · '),
+    href: localize(i.href, lang),
+    terms: [i.title, i.genre, ...i.tags, ...i.tracks.map((tr) => tr.title)].join(' ').toLowerCase(),
+  })),
+  ...packs.map((p) => ({
+    title: p.entry.data.title,
+    meta: t(`packOne.${p.category}`),
+    href: localize('/materials', lang),
+    terms: [p.entry.data.title, p.entry.data.genre, ...p.entry.data.tags].join(' ').toLowerCase(),
+  })),
+];
+---
+
+<header class="site-header" data-header>
+  <div class="container bar">
+    <!-- Логотип: на телефоне меньше -->
+    <a href={localize('/', lang)} class="logo" aria-label={t('nav.home')}>
+      <Logo size={42} class="logo-desktop" />
+      <Logo size={28} class="logo-mobile" />
+    </a>
+
+    <!-- Меню разделов (на телефоне — в мобильном меню) -->
+    <nav class="nav" aria-label={t('nav.main')}>
+      {nav.map((n) => (
+        <a href={localize(n.href, lang)} aria-current={n.key === active ? 'page' : undefined}>
+          {n.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="controls">
+      <!-- Язык: флаг текущего языка, по нажатию — список -->
+      <div class="popover-wrap lang-desktop">
+        <button
+          type="button"
+          class="lang-btn"
+          data-popover-toggle="lang"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-label={t('lang.current')}
+        >
+          <Flag lang={lang} size={22} eager />
+          <span class="lang-code">{lang.toUpperCase()}</span>
+          <Icon name="chevronDown" size={12} class="chev" />
+        </button>
+        <div class="popover lang-menu" data-popover="lang" role="menu" aria-label={t('lang.label')} hidden>
+          <LanguageList lang={lang} path={path} variant="menu" />
+        </div>
+      </div>
+
+      <!-- Тема: солнце в тёмной теме, луна в светлой -->
+      <button
+        type="button"
+        class="icon-btn theme-toggle"
+        data-theme-toggle
+        data-label-light={t('theme.toLight')}
+        data-label-dark={t('theme.toDark')}
+        aria-label={t('theme.toLight')}
+      >
+        <Icon name="sun" class="i-sun" />
+        <Icon name="moon" class="i-moon" />
+      </button>
+
+      <!-- Поиск по трекам и материалам -->
+      <div class="popover-wrap search-desktop">
+        <button
+          type="button"
+          class="icon-btn"
+          data-popover-toggle="search"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-label={t('search.label')}
+        >
+          <Icon name="search" />
+        </button>
+        <div class="popover search-panel" data-popover="search" hidden>
+          <label class="search-field">
+            <Icon name="search" size={16} />
+            <span class="visually-hidden">{t('search.label')}</span>
+            <input type="search" data-search-input placeholder={t('search.placeholder')} autocomplete="off" />
+          </label>
+          <ul class="search-results" data-search-results></ul>
+          <p class="search-empty" data-search-empty hidden>
+            {t('search.empty')}
+          </p>
+          <script type="application/json" data-search-data set:html={JSON.stringify(searchData)} />
+        </div>
+      </div>
+
+      <!-- Кнопка мобильного меню -->
+      <button
+        type="button"
+        class="icon-btn menu-toggle"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-label-open={t('menu.open')}
+        data-label-close={t('menu.close')}
+        aria-label={t('menu.open')}
+      >
+        <Icon name="menu" class="i-menu" />
+        <Icon name="close" class="i-close" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Мобильное меню: разделы и языки -->
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <nav aria-label={t('nav.main')}>
+      {nav.map((n) => (
+        <a href={localize(n.href, lang)} aria-current={n.key === active ? 'page' : undefined}>
+          {n.label}
+          <Icon name="chevronRight" size={16} class="chev" />
+        </a>
+      ))}
+    </nav>
+    <div class="mobile-lang">
+      <div class="mobile-lang-label">
+        <Flag lang={lang} size={16} />
+        <span>{t('lang.label')}</span>
+      </div>
+      <LanguageList lang={lang} path={path} variant="grid" />
+    </div>
+  </div>
+</header>
+
+<script>
+  import './Header.client';
+</script>
+
+<style>
+  @import './Header.css';
+  @import './Header.rtl.css';
+</style>

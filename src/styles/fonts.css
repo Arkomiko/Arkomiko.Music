@@ -1,0 +1,13 @@
+/* Шрифты сайта.
+ * Unbounded — заголовки (800, UPPERCASE), Manrope — текст, JetBrains Mono — метки и время: из пакетов fontsource,
+ * браузер скачивает только нужные наборы букв (latin, cyrillic…). Halfomania — только ник «Arkomiko». */
+
+@import '@fontsource-variable/unbounded';
+@import '@fontsource-variable/manrope';
+@import '@fontsource/jetbrains-mono/500.css';
+
+@font-face {
+  font-family: 'Halfomania';
+  src: url('../assets/fonts/halfomania_regular.ttf') format('truetype');
+  font-display: swap;
+}

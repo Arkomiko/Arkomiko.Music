@@ -1,0 +1,215 @@
+---
+// «Лицензии»: музыка (релизы, демо, лейбл), «если демка становится релизом», материалы (Free, Standard, Extended),
+// указание автора, вопросы, «Особый случай?». Полные тексты — contents_user/licenses/*.md.
+import Base from '../../layouts/Base.astro';
+import { site } from '../../site.config';
+import { useT, type Lang, type UiKey } from '../../lib/lang';
+import { musicTable, packTable, pillClass, pillLabel } from './licenses.data';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+
+type Card = {
+  id: string;
+  title: string;
+  price: string;
+  text: string;
+  link?: { href: string; label: string };
+};
+const musicCards: Card[] = [
+  {
+    id: 'music',
+    title: t('licenses.music.name'),
+    price: t('licenses.music.price'),
+    text: t('licenses.music.text'),
+  },
+  {
+    id: 'demo',
+    title: t('licenses.demo.name'),
+    price: t('licenses.demo.price'),
+    text: t('licenses.demo.text'),
+    link: {
+      href: `https://creativecommons.org/licenses/by-nc-sa/4.0/${lang === 'ru' ? 'deed.ru' : 'deed.en'}`,
+      label: t('licenses.ccLink'),
+    },
+  },
+  {
+    id: 'label',
+    title: t('licenses.label.name'),
+    price: t('licenses.label.price'),
+    text: t('licenses.label.text'),
+  },
+];
+const packCards: Card[] = [
+  { id: 'free', title: t('licenses.free'), price: t('licenses.freePrice'), text: t('licenses.freeText') },
+  {
+    id: 'standard',
+    title: t('licenses.standard'),
+    price: t('licenses.standardPrice'),
+    text: t('licenses.standardText'),
+  },
+  {
+    id: 'extended',
+    title: t('licenses.extended'),
+    price: t('licenses.extendedPrice'),
+    text: t('licenses.extendedText'),
+  },
+];
+
+// Таблицы «что можно» — licenses.data.ts; здесь подписи переводятся на язык страницы.
+const tables = [musicTable, packTable].map((table) => ({
+  ...table,
+  title: t(table.title),
+  columns: table.columns.map((c) => t(c)),
+}));
+
+const demoSteps = [t('licenses.demo1'), t('licenses.demo2'), t('licenses.demo3'), t('licenses.demo4')];
+const faq = [1, 2, 3, 4, 5, 6, 7].map((i) => ({
+  q: t(`licenses.q${i}` as UiKey),
+  a: t(`licenses.a${i}` as UiKey),
+}));
+const creditLine = t('licenses.creditLine');
+const email = site.licenseEmail;
+---
+
+<Base lang={lang} title={t('nav.licenses')} description={t('licenses.lead')} active="licenses">
+  <section class="container intro">
+    <div class="eyebrow">{t('licenses.eyebrow')}</div>
+    <h1 class="h1">{t('licenses.title')}</h1>
+    <p class="lead">{t('licenses.lead')}</p>
+    <p class="text-soft">{t('licenses.text')}</p>
+  </section>
+
+  {[
+    { id: 'music-types', title: t('licenses.musicTitle'), cards: musicCards, table: tables[0] },
+    { id: 'materials', title: t('licenses.packsTitle'), cards: packCards, table: tables[1] },
+  ].map((group) => (
+    <>
+      <section class="section" id={group.id}>
+        <div class="container block">
+          <h2 class="h2">{group.title}</h2>
+          <div class="types">
+            {group.cards.map((l) => (
+              <div class="card type" id={l.id}>
+                <h3 class="h3 type-title">{l.title}</h3>
+                <div class="type-price">{l.price}</div>
+                <p>{l.text}</p>
+                {l.link && (
+                  <a class="type-link" href={l.link.href} target="_blank" rel="noopener license">
+                    {l.link.label}
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id={group.table.id}>
+        <div class="container block">
+          <h2 class="h2">{group.table.title}</h2>
+          <div class="table" role="table">
+            <div class="tr th" role="row">
+              <span role="columnheader">{t('licenses.where')}</span>
+              {group.table.columns.map((c) => (
+                <span role="columnheader">{c}</span>
+              ))}
+            </div>
+            {group.table.rows.map((r) => (
+              <div class="tr" role="row">
+                <span class="use" role="rowheader">
+                  {t(r.use)}
+                </span>
+                {r.cells.map((c, i) => (
+                  <span class="cell" role="cell" data-label={group.table.columns[i]}>
+                    <span class:list={['badge', pillClass[c.p]]}>{t(c.label ?? pillLabel[c.p])}</span>
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {group.id === 'music-types' && (
+        <section class="section" id="demo-release">
+          <div class="container block split">
+            <div class="split-intro">
+              <h2 class="h2">{t('licenses.demoTitle')}</h2>
+            </div>
+            <div class="demo">
+              <ol class="demo-steps">
+                {demoSteps.map((step) => (
+                  <li>{step}</li>
+                ))}
+              </ol>
+              <p class="demo-note">
+                {t('licenses.demoNote')} <a href={`mailto:${email}`}>{email}</a>
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+    </>
+  ))}
+
+  <section class="section" id="credit">
+    <div class="container block split">
+      <div class="split-intro">
+        <h2 class="h2">{t('licenses.credit')}</h2>
+        <p>{t('licenses.creditText')}</p>
+      </div>
+      <div class="card credit">
+        <pre class="credit-line" data-credit>{creditLine}</pre>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline copy"
+          data-copy
+          data-label={t('licenses.copy')}
+          data-done={t('licenses.copied')}
+        >
+          {t('licenses.copy')}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container block">
+      <h2 class="h2">{t('licenses.faq')}</h2>
+      <dl class="faq">
+        {faq.map((f) => (
+          <div class="faq-row">
+            <dt>{f.q}</dt>
+            <dd>{f.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container block special">
+      <div class="special-text">
+        <h2 class="h2">{t('licenses.special')}</h2>
+        <p class="text-soft">
+          {t('licenses.specialText')} <a href={`mailto:${email}`}>{email}</a>
+        </p>
+      </div>
+      <a href={`mailto:${email}`} class="btn btn-primary">
+        {t('licenses.contact')}
+      </a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import './Licenses.client';
+</script>
+
+<style>
+  @import './Licenses.css';
+</style>

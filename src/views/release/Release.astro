@@ -1,0 +1,219 @@
+---
+// Страница релиза или техно-демки: /release/[slug] и /en/release/[slug].
+import { Image, getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PlayButton from '../../components/player/PlayButton.vue';
+import Tracklist from '../../components/player/Tracklist.vue';
+import { coverOf, toPlayerTracks, type Item } from '../../lib/media';
+import { platformLabels, type Permission } from '../../site.config';
+import { clientKeys, formatDate, localize, strings, useT, type Lang } from '../../lib/lang';
+
+interface Props {
+  lang: Lang;
+  item: Item;
+}
+const { lang, item } = Astro.props;
+const t = useT(lang);
+
+const tracks = await toPlayerTracks(item);
+const cover = coverOf(item, lang);
+const og = (await getImage({ src: cover, width: 1200, height: 1200, format: 'jpg' })).src;
+const description = item.entry.body?.trim().split(/\n\s*\n/)[0] || undefined;
+const meta = `${t(`kind.${item.kind}`)} · ${formatDate(item.date, item.exactDate, lang)}`;
+const first = tracks[0];
+// Названия площадок есть на русском и английском, для остальных языков — английское.
+const platformName = (key: string) => {
+  const p = platformLabels[key] as Record<string, string> | undefined;
+  return p?.[lang] ?? p?.en ?? key;
+};
+
+const cells = [
+  { label: t('release.composition'), value: t(`composition.${item.composition}`) },
+  { label: t('release.genre'), value: item.genre ?? '—' },
+  { label: t('release.bpm'), value: item.bpm ? String(item.bpm) : '—' },
+  { label: t('release.key'), value: item.key ?? '—' },
+];
+
+const permLabel: Record<Permission, string> = {
+  allowed: t('perm.allowed'),
+  conditions: t('perm.conditions'),
+  forbidden: t('perm.forbidden'),
+};
+const licenseUrl = item.license.url
+  ? item.license.url.startsWith('/')
+    ? localize(item.license.url, lang)
+    : item.license.url
+  : undefined;
+const license: { label: string; value: string; fill?: boolean; href?: string }[] = [
+  { label: t('license.name'), value: item.license.name, href: licenseUrl },
+  {
+    label: t('license.streams'),
+    value: permLabel[item.license.streams],
+    fill: item.license.streams === 'allowed',
+  },
+  {
+    label: t('license.monetization'),
+    value: permLabel[item.license.monetization],
+    fill: item.license.monetization === 'allowed',
+  },
+  {
+    label: t('license.remixes'),
+    value: permLabel[item.license.remixes],
+    fill: item.license.remixes === 'allowed',
+  },
+  { label: t('license.credit'), value: item.license.credit ?? '' },
+];
+
+// «О релизе»: данные дистрибуции. Блок появляется, если в release.md есть язык названия, лейбл или UPC.
+const languageName = (code: string) => {
+  try {
+    const name = new Intl.DisplayNames([lang], { type: 'language' }).of(code);
+    return name ? name[0].toLocaleUpperCase(lang) + name.slice(1) : code;
+  } catch {
+    return code; // не код языка, а название — показываем как есть
+  }
+};
+const facts = [
+  { label: t('release.kind'), value: t(`kind.${item.kind}`) },
+  { label: t('release.date'), value: formatDate(item.date, item.exactDate, lang) },
+  { label: t('release.genre'), value: item.genre },
+  { label: t('release.language'), value: item.language && languageName(item.language) },
+  { label: t('release.label'), value: item.label },
+  { label: t('release.upc'), value: item.upc, select: true },
+].filter((f) => f.value);
+const showFacts = Boolean(item.language || item.label || item.upc);
+---
+
+<Base lang={lang} title={item.title} description={description} image={og} active="music">
+  <section class="hero">
+    <!-- Фон шапки — та же обложка, сильно размытая: хватает картинки 96 px (вместо 720 — в 20 раз легче). -->
+    <Image src={cover} alt="" width={96} height={96} class="hero-bg" loading="eager" fetchpriority="low" />
+    <div class="container hero-inner">
+      <Image
+        src={cover}
+        alt={item.title}
+        width={1024}
+        height={1024}
+        class="cover"
+        loading="eager"
+        fetchpriority="high"
+        sizes="(max-width: 767px) 90vw, 512px"
+        widths={[360, 512, 720, 1024]}
+      />
+      <div class="info">
+        <div class="top">
+          <div class="eyebrow kicker">{meta}</div>
+          <div class="logo-name artist">Arkomiko</div>
+        </div>
+        <h1 class="h1 title">{item.title}</h1>
+        <div class="bottom">
+          <dl class="cells">
+            {cells.map((c) => (
+              <div class="cell">
+                <dt class="mono-label">{c.label}</dt>
+                <dd>{c.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <div class="actions">
+            <PlayButton client:load tracks={tracks} t={strings(lang, clientKeys.playButton)} />
+            {item.download && first ? (
+              <a class="btn btn-outline" href={first.src} download={first.file}>
+                {t('release.download')}
+              </a>
+            ) : (
+              <span class="btn btn-outline" aria-disabled="true">
+                {t('release.download')}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container body">
+    <section class="part tracks" aria-labelledby="tracklist-h">
+      <h2 id="tracklist-h" class="h2 part-title">
+        {t('release.tracklist')}
+      </h2>
+      <Tracklist client:visible tracks={tracks} t={strings(lang, clientKeys.tracklist)} />
+    </section>
+
+    {item.tags.length > 0 && (
+      <section class="part tags-block">
+        <div class="mono-label part-label">{t('release.tags')}</div>
+        <ul class="tag-list">
+          {item.tags.map((tag) => (
+            <li class="tag">#{tag}</li>
+          ))}
+        </ul>
+        <p class="hint">{t('release.tagsHint')}</p>
+      </section>
+    )}
+
+    {item.links.length > 0 && (
+      <section class="part listen">
+        <div class="mono-label part-label">{t('release.listenOn')}</div>
+        <div class="platforms">
+          {item.links.map(([key, url]) => (
+            <a href={url} target="_blank" rel="noopener">
+              {platformName(key)}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <div class="side">
+      <aside class="part license" aria-labelledby="license-h">
+        <h2 id="license-h" class="h2 part-title">
+          {t('release.license')}
+        </h2>
+        <dl class="facts-card card">
+          {license.map((l) => (
+            <div class="facts-row">
+              <dt>{l.label}</dt>
+              <dd class:list={['facts-value', { fill: l.fill }]}>
+                {l.href ? (
+                  <a
+                    href={l.href}
+                    target={l.href.startsWith('http') ? '_blank' : undefined}
+                    rel="noopener license"
+                  >
+                    {l.value}
+                  </a>
+                ) : (
+                  l.value
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <a href={licenseUrl ?? localize('/licenses', lang)} class="full-license">
+          {t('release.fullLicense')}
+        </a>
+      </aside>
+
+      {showFacts && (
+        <section class="part about" aria-labelledby="about-h">
+          <h2 id="about-h" class="h2 part-title">
+            {t('release.about')}
+          </h2>
+          <dl class="facts-card card">
+            {facts.map((f) => (
+              <div class="facts-row">
+                <dt>{f.label}</dt>
+                <dd class:list={['facts-value', { select: f.select }]}>{f.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+    </div>
+  </div>
+</Base>
+
+<style>
+  @import './Release.css';
+</style>

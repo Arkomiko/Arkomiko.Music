@@ -1,0 +1,19 @@
+---
+// Страница релиза для всех языков, кроме основного: /en/release/<папка>, /de/release/<папка>…
+import Release from '../../../views/release/Release.astro';
+import { langPaths } from '../../../lib/lang';
+import { releasePaths } from '../../../lib/media';
+
+export async function getStaticPaths() {
+  const releases = await releasePaths();
+  return langPaths().flatMap(({ params: { lang } }) =>
+    releases.map(({ params, props }) => ({
+      params: { lang, slug: params.slug },
+      props: { lang, item: props.item },
+    })),
+  );
+}
+const { lang, item } = Astro.props;
+---
+
+<Release lang={lang} item={item} />

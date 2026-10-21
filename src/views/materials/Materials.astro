@@ -1,0 +1,157 @@
+---
+// «Материалы»: паки из contents_user/pack/<Semples|Presets|Projects|Collection>/ с фильтром по типу.
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { coverOf, getPacks, packCategories, type PackCategory } from '../../lib/media';
+import template from '../../i18n';
+import { localize, useT, type Lang, type UiKey } from '../../lib/lang';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+
+const TAGS_ON_CARD = 4;
+
+// «24 сэмпла», «1 пресет», «5 проектов»: слово зависит от типа папки и числа.
+const plural = new Intl.PluralRules(lang);
+const count = (category: PackCategory, n: number) => {
+  // В шаблоне формы one / few / many / other; других форм языка (zero, two) нет — тогда other.
+  const key = `count.${category}.${plural.select(n)}`;
+  return t((key in template ? key : `count.${category}.other`) as UiKey, { n });
+};
+
+const packs = await Promise.all(
+  (await getPacks()).map(async (p) => {
+    const d = p.entry.data;
+    const cover = coverOf(p, lang);
+    const meta = [d.count ? count(p.category, d.count) : undefined, d.bpm && `${d.bpm} BPM`, d.key]
+      .filter(Boolean)
+      .join(' · ');
+    // Плашка лицензии ведёт на её условия на странице «Лицензии». Из тегов на карточке — первые TAGS_ON_CARD
+    // без повторов жанра и формата, остальные — в чипе «+N» (все теги участвуют в поиске по сайту).
+    const fixed = [t(`packOne.${p.category}`), d.genre, d.format].filter(Boolean) as string[];
+    const seen = new Set(fixed.map((x) => x.toLowerCase()));
+    const tags = d.tags.filter((tag) => !seen.has(tag.toLowerCase()));
+    const rest = tags.slice(TAGS_ON_CARD);
+    const chips: { label: string; href?: string; title?: string }[] = [
+      { label: fixed[0] },
+      {
+        label: t('samples.license', { name: t(`licenses.${p.license}`) }),
+        href: localize(`/licenses#${p.license}`, lang),
+      },
+      ...fixed.slice(1).map((label) => ({ label })),
+      ...tags.slice(0, TAGS_ON_CARD).map((label) => ({ label })),
+      ...(rest.length ? [{ label: `+${rest.length}`, title: rest.join(', ') }] : []),
+    ];
+    // Бесплатный пак скачивают, платный — приобретают на площадке по ссылке download.
+    const free = d.price === 'free';
+    return { ...p, d, cover, meta, chips, free };
+  }),
+);
+
+const filters = [
+  { key: 'all', label: t('filter.all') },
+  ...packCategories.map((c) => ({ key: c, label: t(`pack.${c}`) })),
+];
+const how = [
+  { title: t('samples.inside'), text: t('samples.insideText') },
+  { title: t('samples.format'), text: t('samples.formatText') },
+  { title: t('samples.use'), text: t('samples.useText') },
+];
+---
+
+<Base lang={lang} title={t('samples.title')} description={t('samples.lead')} active="materials">
+  <section class="container intro">
+    <div class="eyebrow">{t('samples.eyebrow')}</div>
+    <h1 class="h1">{t('samples.title')}</h1>
+    <p class="lead">{t('samples.lead')}</p>
+    <p class="text-soft">{t('samples.text')}</p>
+  </section>
+
+  <section class="section">
+    <div class="container block" data-packs>
+      <div class="head">
+        <h2 class="h2">{t('samples.all')}</h2>
+        <div class="chips" role="group" aria-label={t('filter.label')}>
+          {filters.map((f, i) => (
+            <button type="button" class="chip" data-filter={f.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {packs.length ? (
+        <div class="grid">
+          {packs.map((p) => (
+            <article class="card pack" data-cat={p.category}>
+              <Image src={p.cover} alt="" width={720} height={720} class="pack-cover" />
+              <div class="pack-head">
+                <div class="pack-titles">
+                  <h3 class="pack-title">{p.d.title}</h3>
+                  {p.meta && <div class="pack-meta">{p.meta}</div>}
+                </div>
+                <span class:list={['badge', p.d.price === 'free' ? 'badge-fill' : 'price']}>
+                  {p.d.price === 'free' ? t('samples.free') : p.d.price}
+                </span>
+              </div>
+              {p.chips.length > 0 && (
+                <ul class="pack-tags">
+                  {p.chips.map((c) => (
+                    <li title={c.title}>{c.href ? <a href={c.href}>{c.label}</a> : c.label}</li>
+                  ))}
+                </ul>
+              )}
+              <div class="pack-actions">
+                {p.d.download ? (
+                  <a class="btn btn-sm btn-outline" href={p.d.download} target="_blank" rel="noopener">
+                    <Icon name={p.free ? 'download' : 'bag'} size={16} />
+                    {t(p.free ? 'samples.download' : 'samples.buy')}
+                  </a>
+                ) : (
+                  <span class="btn btn-sm btn-outline" aria-disabled="true">
+                    <Icon name={p.free ? 'download' : 'bag'} size={16} />
+                    {t(p.free ? 'samples.download' : 'samples.buy')}
+                  </span>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="muted">{t('samples.empty')}</p>
+      )}
+      <p class="muted" data-empty hidden>
+        {t('home.empty')}
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container block">
+      <h2 class="h2">{t('samples.how')}</h2>
+      <div class="how">
+        {how.map((h) => (
+          <div class="card how-card">
+            <h3 class="h3">{h.title}</h3>
+            <p>{h.text}</p>
+          </div>
+        ))}
+      </div>
+      <a href={localize('/licenses', lang)} class="btn btn-primary terms">
+        {t('samples.terms')}
+      </a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import './Materials.client';
+</script>
+
+<style>
+  @import './Materials.css';
+</style>

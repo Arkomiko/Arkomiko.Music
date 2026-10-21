@@ -18,6 +18,7 @@ export const icons = {
   menu: { stroke: 2, body: '<path d="M4 7 H20 M4 12 H20 M4 17 H20"/>' },
   close: { stroke: 2, body: '<path d="M6 6 L18 18 M18 6 L6 18"/>' },
   download: { stroke: 1.8, body: '<path d="M12 4 V15 M7.5 10.5 L12 15 L16.5 10.5 M5 19.5 H19"/>' },
+  bag: { stroke: 1.8, body: '<path d="M5.5 8 H18.5 L17.5 20 H6.5 Z M9 10.5 V6.5 A3 3 0 0 1 15 6.5 V10.5"/>' },
   check: { stroke: 2.4, body: '<path d="M5 12.5 L10 17 L19 7"/>' },
   volume: {
     stroke: 2,

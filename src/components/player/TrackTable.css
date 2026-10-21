@@ -1,0 +1,196 @@
+/* Таблица треков: на компьютере колонки ID · обложка · название · время · жанр · статус · кнопки,
+ * на телефоне — список «обложка · название + плашка · кнопки». */
+
+.tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.see-all {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.row {
+  display: grid;
+  grid-template-columns: 64px 56px minmax(0, 1fr) 80px 140px 160px 96px;
+  gap: 20px;
+  align-items: center;
+  padding: 0 16px;
+}
+.cols {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.list .row {
+  height: 76px;
+  border-bottom: 1px solid var(--line);
+}
+.list .row.active {
+  background: var(--row-active);
+}
+.id,
+.time {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+}
+.active .id,
+.active .title {
+  color: var(--accent-ink);
+}
+.cover img,
+.cover-empty {
+  display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 3px;
+  background: var(--surface-2);
+}
+.name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.artist,
+.genre {
+  font-size: 13px;
+  color: var(--muted);
+}
+.m-meta,
+.m-see-all {
+  display: none;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dl,
+.play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.dl {
+  border: 1px solid var(--line-2);
+  color: var(--text);
+}
+.dl.is-off {
+  opacity: 0.3;
+  cursor: default;
+}
+.play {
+  border: 0;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+@media (max-width: 1199px) {
+  .row {
+    grid-template-columns: 48px 48px minmax(0, 1fr) 56px 110px 140px 86px;
+    gap: 14px;
+    padding: 0 10px;
+  }
+}
+@media (max-width: 959px) {
+  .row {
+    grid-template-columns: 48px 48px minmax(0, 1fr) 56px 140px 86px;
+  }
+  .genre,
+  .cols span:nth-child(5) {
+    display: none;
+  }
+}
+@media (max-width: 767px) {
+  .tracks {
+    gap: 12px;
+  }
+  .see-all,
+  .cols,
+  .id,
+  .time,
+  .genre,
+  .type,
+  .artist {
+    display: none;
+  }
+  .list .row {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    gap: 9px;
+    height: auto;
+    padding: 10px 0;
+  }
+  .cover img,
+  .cover-empty {
+    width: 42px;
+    height: 42px;
+    border-radius: 2.6px;
+  }
+  .name {
+    gap: 4px;
+  }
+  .title {
+    font-size: 13px;
+  }
+  .m-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .m-meta .badge {
+    height: 18px;
+    padding: 0 7px;
+    font-size: 10px;
+  }
+  .m-info {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .actions {
+    gap: 9px;
+  }
+  .dl,
+  .play {
+    border-radius: 18px;
+  }
+  .m-see-all {
+    display: inline-flex;
+    width: 100%;
+    margin-top: 4px;
+  }
+}

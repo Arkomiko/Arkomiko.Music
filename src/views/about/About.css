@@ -1,0 +1,235 @@
+/* «Биография»: шапка с ником и логотипом, «Чем занимаюсь», «Опыт» (лента), «Контакты». */
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 96px;
+  padding-block: 80px;
+}
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  flex-grow: 1;
+  min-width: 0;
+}
+.hero-name {
+  font-size: 128px;
+}
+.hero-text p {
+  max-width: 680px;
+}
+.hero-text .text-soft {
+  line-height: 1.65;
+}
+.hero :global(.logo-desktop) {
+  flex-shrink: 0;
+  width: clamp(240px, 30vw, 420px);
+  height: auto;
+  color: var(--text);
+}
+.hero :global(.logo-mobile),
+.mobile-only {
+  display: none;
+}
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.socials a {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--line-2);
+  border-radius: 22px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-block: 56px 72px;
+}
+.doing {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.doing-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+}
+.doing-card p {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.exp {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 64px;
+}
+.exp-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.exp-intro p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.timeline li {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 32px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+.year {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--accent-ink);
+}
+.exp-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.exp-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.exp-text {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.contacts {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.contacts-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.contacts-text a {
+  color: var(--accent-ink);
+}
+
+@media (max-width: 1199px) {
+  .hero {
+    gap: 56px;
+  }
+  .hero-name {
+    font-size: 104px;
+  }
+  .doing {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .exp {
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+@media (max-width: 767px) {
+  .desktop-only,
+  .hero :global(.logo-desktop) {
+    display: none;
+  }
+  .mobile-only {
+    display: block;
+  }
+  .hero {
+    padding-block: 25px 28px;
+  }
+  .hero-text {
+    gap: 16px;
+  }
+  .hero-name {
+    font-size: 56px;
+    line-height: 0.95;
+  }
+  .hero :global(.logo-mobile) {
+    display: block;
+    align-self: center;
+    margin-block: 6px;
+    color: var(--text);
+  }
+  .socials {
+    gap: 7px;
+    margin-top: 0;
+  }
+  .socials a {
+    height: 40px;
+    padding: 0 14px;
+    border-color: var(--line);
+    border-radius: 19px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .block {
+    gap: 12px;
+    padding-block: 22px 28px;
+  }
+  .doing {
+    gap: 9px;
+  }
+  .doing-card {
+    gap: 7px;
+    padding: 14px;
+  }
+  .doing-card .h3 {
+    font-size: 12px;
+  }
+  .doing-card p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .exp {
+    display: flex;
+    gap: 12px;
+  }
+  .timeline li {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 11px;
+    padding: 12px 0;
+  }
+  .year {
+    font-size: 11px;
+  }
+  .exp-title {
+    font-size: 13px;
+  }
+  .exp-text {
+    display: none;
+  }
+  .contacts {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .contacts-text {
+    gap: 12px;
+  }
+}

@@ -1,0 +1,12 @@
+changelog:
+  exclude:
+    labels: [skip-changelog]
+  categories:
+    - title: Новое
+      labels: [enhancement, feature]
+    - title: Исправления
+      labels: [bug, fix]
+    - title: Документация
+      labels: [documentation, docs]
+    - title: Прочее
+      labels: ['*']

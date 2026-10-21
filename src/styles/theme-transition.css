@@ -1,0 +1,22 @@
+/* Плавная смена темы (lib/theme.ts). */
+
+/* Браузеры с View Transitions: стандартное растворение выключено — новая тема раскрывается кругом
+ * (анимацию запускает lib/theme.ts). Класс есть только во время смены темы, переходы между страницами не задеты. */
+:root.theme-switching::view-transition-old(root),
+:root.theme-switching::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Остальные браузеры: цвета фона, текста и линий плавно перетекают. */
+:root.theme-fade,
+:root.theme-fade *,
+:root.theme-fade *::before,
+:root.theme-fade *::after {
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    fill 0.35s ease,
+    stroke 0.35s ease !important;
+}

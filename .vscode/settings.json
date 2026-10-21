@@ -10,6 +10,6 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "package.json": "package-lock.json, .nvmrc, .prettierrc, .editorconfig",
-    "README.md": "LICENSE, MUSIC-LICENSE.md"
+    "README.md": "LICENSE, NOTICE.md"
   }
 }

@@ -1,0 +1,45 @@
+---
+// Пустые состояния: нет контента вообще (non_content_user), нет треков (non_traks), нет материалов (non_pack).
+// Анимация — SVG из макета, отдельная для тёмной и светлой темы; показывается та, что подходит текущей теме.
+import contentDark from '../../assets/system/content-error-08-dark-anim.svg?url';
+import contentLight from '../../assets/system/content-error-08-light-anim.svg?url';
+import tracksDark from '../../assets/system/no-track-06-dark-anim.svg?url';
+import tracksLight from '../../assets/system/no-track-06-light-anim.svg?url';
+import packsDark from '../../assets/system/no-packs-07-dark-anim.svg?url';
+import packsLight from '../../assets/system/no-packs-07-light-anim.svg?url';
+import SystemArt from './SystemArt.astro';
+import { useT, type Lang } from '../../lib/lang';
+
+export type EmptyKind = 'content' | 'tracks' | 'packs';
+
+interface Props {
+  lang: Lang;
+  kind: EmptyKind;
+  /** h1 — отдельная страница; h2 — блок внутри другой страницы. */
+  as?: 'h1' | 'h2';
+}
+const { lang, kind, as: Heading = 'h1' } = Astro.props;
+const t = useT(lang);
+
+const art = {
+  content: { dark: contentDark, light: contentLight },
+  tracks: { dark: tracksDark, light: tracksLight },
+  packs: { dark: packsDark, light: packsLight },
+}[kind];
+---
+
+<div class="empty">
+  <SystemArt dark={art.dark} light={art.light} />
+  <Heading class="title">{t(`empty.${kind}.title`)}</Heading>
+  {kind === 'content' ? (
+    <p class="note signed">
+      <em>{t('empty.content.note')}</em> — <span class="logo-name">Arkomiko</span>
+    </p>
+  ) : (
+    <p class="note">{t(`empty.${kind}.note`)}</p>
+  )}
+</div>
+
+<style>
+  @import './EmptyState.css';
+</style>

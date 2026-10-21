@@ -1,0 +1,54 @@
+name: Ошибка
+description: Что-то работает не так, как описано в документации.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Что происходит
+      description: Опиши ошибку.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Как воспроизвести
+      placeholder: |
+        1. Открыть …
+        2. Нажать …
+        3. Увидеть …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Что ожидалось
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Где
+      options:
+        - npm run dev
+        - npm run build / preview
+        - опубликованный сайт
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Окружение
+      placeholder: Windows 11, Node 22.12, Chrome 140
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Версия проекта
+      placeholder: 0.0.1009 или хеш коммита
+  - type: textarea
+    id: logs
+    attributes:
+      label: Вывод консоли или скриншоты
+      render: text

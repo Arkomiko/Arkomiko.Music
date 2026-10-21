@@ -1,0 +1,37 @@
+/* «Музыка»: вступление и таблица всех треков. */
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-block: 72px 56px;
+}
+.intro .lead {
+  font-size: 20px;
+  max-width: 760px;
+}
+.intro .text-soft {
+  font-size: 16px;
+  max-width: 760px;
+}
+.link {
+  color: var(--accent-ink);
+}
+.block {
+  padding-block: 56px 72px;
+}
+@media (max-width: 767px) {
+  .intro {
+    gap: 14px;
+    padding-block: 25px 28px;
+  }
+  .intro .lead {
+    font-size: 16px;
+  }
+  .intro .text-soft {
+    font-size: 13px;
+  }
+  .block {
+    padding-block: 22px 28px;
+  }
+}

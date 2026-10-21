@@ -1,0 +1,159 @@
+/* «Материалы»: вступление, сетка карточек паков, «Как устроены паки». */
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-block: 72px 56px;
+}
+.intro .lead {
+  font-size: 20px;
+  max-width: 760px;
+}
+.intro .text-soft {
+  font-size: 16px;
+  max-width: 760px;
+}
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-block: 56px 64px;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.pack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+.pack :global(.pack-cover) {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+.pack-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.pack-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.pack-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+.pack-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.price {
+  border-color: var(--line-2);
+}
+.pack-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pack-tags li {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--line-2);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.pack-tags a {
+  color: var(--accent-ink);
+}
+.pack-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.how {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.how-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+}
+.how-card p {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.terms {
+  align-self: flex-start;
+}
+
+@media (max-width: 1199px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  .intro {
+    gap: 14px;
+    padding-block: 25px 28px;
+  }
+  .intro .lead {
+    font-size: 16px;
+  }
+  .intro .text-soft {
+    font-size: 13px;
+  }
+  .block {
+    gap: 14px;
+    padding-block: 22px 28px;
+  }
+  .grid,
+  .how {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .how-card {
+    padding: 14px;
+  }
+  .how-card p {
+    font-size: 13px;
+  }
+  .chips {
+    gap: 6px;
+  }
+  .chips .chip {
+    height: 36px;
+    padding: 0 14px;
+    font-size: 11px;
+  }
+  .terms {
+    align-self: stretch;
+  }
+}
