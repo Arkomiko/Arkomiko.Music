@@ -1,8 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Вопрос по использованию
-    url: https://discord.gg/mAFDRGj9vH
-    about: Вопросы о том, как сделать свой сайт на основе проекта, — в Discord.
   - name: Telegram
     url: https://t.me/arkomiko_gr
-    about: Новости и связь с автором.
+    about: Новости, вопросы по использованию и связь с автором.

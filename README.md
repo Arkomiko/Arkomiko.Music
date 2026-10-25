@@ -285,7 +285,6 @@ Pull request'ы принимаются выборочно: исправлени�
 | -------- | ---------------------------------------------------------- |
 | E-mail   | [Arikomika@gmail.com](mailto:Arikomika@gmail.com)          |
 | Telegram | [t.me/arkomiko_gr](https://t.me/arkomiko_gr)               |
-| Discord  | [discord.gg/mAFDRGj9vH](https://discord.gg/mAFDRGj9vH)     |
 | YouTube  | [@arkomiko_music](https://www.youtube.com/@arkomiko_music) |
 
 Вопросы по коду и ошибки — через [Issues](https://github.com/Arkomiko/Arkomiko.Music/issues).

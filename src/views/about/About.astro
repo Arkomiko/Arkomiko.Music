@@ -2,7 +2,7 @@
 // «Об авторе»: биография, соцсети, «Чем занимаюсь», «Опыт», «Контакты».
 import Base from '../../layouts/Base.astro';
 import Logo from '../../components/ui/Logo.astro';
-import { site } from '../../site.config';
+import { site, socialsFor } from '../../site.config';
 import { localize, useT, type Lang } from '../../lib/lang';
 
 interface Props {
@@ -11,25 +11,35 @@ interface Props {
 const { lang } = Astro.props;
 const t = useT(lang);
 
-// Порядок соцсетей как в макете страницы.
-const order = ['YouTube', 'Telegram', 'Discord', 'SoundCloud'];
-const socials = [...site.socials].sort((a, b) => order.indexOf(a.label) - order.indexOf(b.label));
+const socials = socialsFor(lang);
+// Биография — несколько абзацев: в languages/ они разделены пустой строкой (\n\n).
+const bio = t('about.bio').split('\n\n');
 
 const doing = [
   { title: t('about.music'), text: t('about.musicText'), short: t('about.musicShort') },
-  { title: t('about.content'), text: t('about.contentText'), short: t('about.contentShort') },
-  { title: t('about.label'), text: t('about.labelText'), short: t('about.labelShort') },
+  { title: t('about.voice'), text: t('about.voiceText'), short: t('about.voiceShort') },
+  { title: t('about.animation'), text: t('about.animationText'), short: t('about.animationShort') },
+  { title: t('about.video'), text: t('about.videoText'), short: t('about.videoShort') },
   { title: t('about.games'), text: t('about.gamesText'), short: t('about.gamesShort') },
+  { title: t('about.translation'), text: t('about.translationText'), short: t('about.translationShort') },
+  { title: t('about.code'), text: t('about.codeText'), short: t('about.codeShort') },
+  { title: t('about.label'), text: t('about.labelText'), short: t('about.labelShort') },
 ];
 
-// Опыт по годам: тексты — ключи about.exp1…exp6 (languages/); последний пункт — в планах («Скоро»).
+// Опыт по годам: тексты — ключи about.exp1…exp11 (languages/); последний пункт — в планах («Скоро»).
+// href — заголовок пункта становится ссылкой.
 const experience = [
-  { year: '2016', title: t('about.exp1'), text: t('about.exp1Text') },
-  { year: '2018', title: t('about.exp2'), text: t('about.exp2Text') },
-  { year: '2020', title: t('about.exp3'), text: t('about.exp3Text') },
-  { year: '2022', title: t('about.exp4'), text: t('about.exp4Text') },
-  { year: '2026', title: t('about.exp5'), text: t('about.exp5Text') },
-  { year: t('about.year'), title: t('about.exp6'), text: t('about.exp6Text') },
+  { year: '2011', title: t('about.exp1'), text: t('about.exp1Text') },
+  { year: '2016', title: t('about.exp2'), text: t('about.exp2Text') },
+  { year: '2018', title: t('about.exp3'), text: t('about.exp3Text') },
+  { year: '2019', title: t('about.exp4'), text: t('about.exp4Text') },
+  { year: '2020', title: t('about.exp5'), text: t('about.exp5Text') },
+  { year: '2021', title: t('about.exp6'), text: t('about.exp6Text') },
+  { year: '2022', title: t('about.exp7'), text: t('about.exp7Text') },
+  { year: '2023', title: t('about.exp8'), text: t('about.exp8Text') },
+  { year: '2024', title: t('about.exp9'), text: t('about.exp9Text'), href: 'https://vk.ru/goliathchild' },
+  { year: '2026', title: t('about.exp10'), text: t('about.exp10Text') },
+  { year: t('about.year'), title: t('about.exp11'), text: t('about.exp11Text') },
 ];
 const email = site.email || '[email]';
 ---
@@ -41,7 +51,11 @@ const email = site.email || '[email]';
       <h1 class="logo-name hero-name">Arkomiko</h1>
       <p class="lead desktop-only">{t('about.lead')}</p>
       <p class="lead mobile-only">{t('about.leadShort')}</p>
-      <p class="text-soft desktop-only">{t('about.bio')}</p>
+      <div class="bio desktop-only">
+        {bio.map((p) => (
+          <p class="text-soft">{p}</p>
+        ))}
+      </div>
       <p class="text-soft mobile-only">{t('about.bioShort')}</p>
       <Logo variant="line" size={194} label={t('logo.alt')} class="logo-mobile" />
       <div class="socials">
@@ -81,7 +95,15 @@ const email = site.email || '[email]';
           <li>
             <div class="year">{e.year}</div>
             <div class="exp-body">
-              <div class="exp-title">{e.title}</div>
+              <div class="exp-title">
+                {e.href ? (
+                  <a href={e.href} target="_blank" rel="noopener">
+                    {e.title}
+                  </a>
+                ) : (
+                  e.title
+                )}
+              </div>
               <div class="exp-text">{e.text}</div>
             </div>
           </li>

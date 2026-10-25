@@ -22,6 +22,11 @@
 .hero-text .text-soft {
   line-height: 1.65;
 }
+.bio {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
 .hero :global(.logo-desktop) {
   flex-shrink: 0;
   width: clamp(240px, 30vw, 420px);
@@ -67,6 +72,11 @@
   flex-direction: column;
   gap: 10px;
   padding: 24px;
+}
+/* Длинные слова («Программирование», немецкие составные) переносятся по слогам, а не вылезают из карточки. */
+.doing-card .h3 {
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 .doing-card p {
   font-size: 15px;
@@ -115,6 +125,14 @@
 .exp-title {
   font-size: 20px;
   font-weight: 700;
+}
+.exp-title a {
+  text-decoration: underline;
+  text-decoration-color: var(--accent-ink);
+  text-underline-offset: 4px;
+}
+.exp-title a:hover {
+  color: var(--accent-ink);
 }
 .exp-text {
   font-size: 15px;

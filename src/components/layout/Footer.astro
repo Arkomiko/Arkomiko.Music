@@ -1,5 +1,5 @@
 ---
-import { site } from '../../site.config';
+import { site, socialsFor } from '../../site.config';
 import { localize, useT, type Lang } from '../../lib/lang';
 
 interface Props {
@@ -12,7 +12,7 @@ const t = useT(lang);
 <footer class="site-footer section">
   <div class="container inner">
     <nav aria-label="Footer">
-      {site.socials.map((s) => (
+      {socialsFor(lang).map((s) => (
         <a href={s.url} target="_blank" rel="me noopener">
           {s.label}
         </a>

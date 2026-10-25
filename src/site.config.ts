@@ -9,19 +9,29 @@ export type ReleaseLicense = {
   remixes: Permission;
   credit?: string; // без значения: «Music: Arkomiko — Название трека»
 };
+export type Social = { label: string; labelRu?: string; url: string };
 
 export const site = {
   name: 'Arkomiko',
   url: 'https://arkomiko.music',
   email: 'Arikomika@gmail.com', // пусто — на сайте будет заглушка [email]
 
-  // Соцсети: подвал и страница «Об авторе».
+  // Соцсети: подвал и страница «Об авторе», в этом порядке. Без адреса — на сайте не показывается.
+  // labelRu — подпись на русской версии, если отличается.
   socials: [
     { label: 'YouTube', url: 'https://www.youtube.com/@arkomiko_music' },
     { label: 'Telegram', url: 'https://t.me/arkomiko_gr' },
     { label: 'SoundCloud', url: 'https://soundcloud.com/arkomiko' },
-    { label: 'Discord', url: 'https://discord.gg/mAFDRGj9vH' },
-  ],
+    { label: 'Spotify', url: 'https://open.spotify.com/artist/1w1dJBEE10sU9oUVpZCuFp' },
+    { label: 'Apple Music', url: 'https://music.apple.com/artist/arkomiko/1626844426' },
+    { label: 'Yandex Music', labelRu: 'Яндекс Музыка', url: 'https://music.yandex.ru/artist/16784654' },
+    { label: 'Reddit', url: 'https://www.reddit.com/user/Arkomiko/' },
+    { label: 'X', url: 'https://x.com/arkomiko21299' },
+    { label: 'VK', url: 'https://vk.com/arkomiko_news' },
+    { label: 'Twitch', url: 'https://www.twitch.tv/arkomiko' },
+    { label: 'Boosty', url: 'https://boosty.to/arkomiko' },
+    { label: 'Ko-fi', url: 'https://ko-fi.com/arkomiko' },
+  ] as Social[],
 
   // Почта для лицензий, договоров и претензий Content ID.
   licenseEmail: 'Arkomiko.Music@gmail.com',
@@ -47,6 +57,12 @@ export const site = {
     } as ReleaseLicense,
   },
 };
+
+// Соцсети для страницы: только с адресом, подпись — на языке страницы.
+export const socialsFor = (lang: string) =>
+  site.socials
+    .filter((s) => s.url)
+    .map((s) => ({ url: s.url, label: (lang === 'ru' && s.labelRu) || s.label }));
 
 // Подписи площадок для release.md → links.
 export const platformLabels: Record<string, { ru: string; en: string }> = {
