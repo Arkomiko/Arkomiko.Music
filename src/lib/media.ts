@@ -139,12 +139,16 @@ export function getCatalog(): Promise<Item[]> {
 async function buildCatalog(): Promise<Item[]> {
   const rls = (await getCollection('rls')) as Entry[];
   const dr = (await getCollection('dr')) as Entry[];
-  const rlsSlugs = new Set(rls.map((e) => e.id));
+  // Адрес: поле slug из release.md или имя папки.
+  const slugOf = (e: Entry) => e.data.slug ?? e.id;
+  const rlsSlugs = new Set(rls.map(slugOf));
 
   const items = await Promise.all([
-    ...rls.filter(visible).map((e) => buildItem('RLS', e, e.id)),
-    // Одинаковые папки в RLS и DR допустимы: черновик получает адрес с -draft.
-    ...dr.filter(visible).map((e) => buildItem('DR', e, rlsSlugs.has(e.id) ? `${e.id}-draft` : e.id)),
+    ...rls.filter(visible).map((e) => buildItem('RLS', e, slugOf(e))),
+    // Одинаковые адреса в RLS и DR допустимы: черновик получает адрес с -draft.
+    ...dr
+      .filter(visible)
+      .map((e) => buildItem('DR', e, rlsSlugs.has(slugOf(e)) ? `${slugOf(e)}-draft` : slugOf(e))),
   ]);
 
   // Сквозные ID треков: по дате, от старых к новым. На сайте список идёт в обратном порядке.
@@ -183,11 +187,11 @@ async function buildItem(section: Section, entry: Entry, slug: string): Promise<
     tags: data.tags,
     covers: coversFor(dir, entry.id, data.status === 'draft' ? 'Draft' : 'Track', data.placeholder),
     links: Object.entries(data.links),
-    // Техно-демки и черновики (DR) — CC BY-NC-SA 4.0, остальное — Arkomiko Music License; release.md может перекрыть.
+    // Техно-демки и черновики (DR) — CC BY-NC-SA 4.0, остальное — <имя> Music License; release.md может перекрыть.
     license: {
       ...(section === 'DR' || data.kind === 'techno-demo' ? site.licenses.demo : site.licenses.music),
       ...data.license,
-      credit: data.license?.credit ?? `Music: Arkomiko — ${data.title}`,
+      credit: data.license?.credit ?? `Music: ${site.name} — ${data.title}`,
     },
     download: data.download,
     tracks,

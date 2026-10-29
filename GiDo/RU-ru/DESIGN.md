@@ -1,6 +1,6 @@
 # Дизайн
 
-[← К README](../../README.md)
+[← К README](README.md)
 
 Визуальная система сайта Arkomiko.Music. Логотип, маскот, иллюстрации и палитра принадлежат автору и не входят в лицензию кода, см. [USAGE.md](USAGE.md) и [LICENSES.md](LICENSES.md).
 
@@ -31,9 +31,9 @@
 ## Десктоп и телефон
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../assets/screens/desktop-mobile-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="../assets/screens/desktop-mobile-light.png">
-  <img src="../assets/screens/desktop-mobile-dark.png" alt="Страница релиза на десктопе и телефоне" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/screens/desktop-mobile-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/screens/desktop-mobile-light.png">
+  <img src="assets/screens/desktop-mobile-dark.png" alt="Страница релиза на десктопе и телефоне" width="100%">
 </picture>
 
 На телефоне меню сворачивается в кнопку, нижний плеер становится компактным, спектрометр переносится в полноэкранный плеер.
@@ -81,9 +81,9 @@ Unbounded, Manrope и JetBrains Mono подключаются через Fontsou
 ## Плеер
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../assets/screens/player-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="../assets/screens/player-light.png">
-  <img src="../assets/screens/player-dark.png" alt="Нижний плеер со спектрометром" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/screens/player-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/screens/player-light.png">
+  <img src="assets/screens/player-dark.png" alt="Нижний плеер со спектрометром" width="100%">
 </picture>
 
 - Плеер закреплён внизу экрана и не останавливается при переходе между страницами и смене языка.
@@ -94,9 +94,9 @@ Unbounded, Manrope и JetBrains Mono подключаются через Fontsou
 ## Страницы
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../assets/screens/pages-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="../assets/screens/pages-light.png">
-  <img src="../assets/screens/pages-dark.png" alt="Музыка, релиз, материалы, лицензии" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/screens/pages-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/screens/pages-light.png">
+  <img src="assets/screens/pages-dark.png" alt="Музыка, релиз, материалы, лицензии" width="100%">
 </picture>
 
 | Пункт меню | Адрес              | Содержимое                                               |
@@ -113,9 +113,9 @@ Unbounded, Manrope и JetBrains Mono подключаются через Fontsou
 Если контента нет, вместо раздела показывается служебная страница с анимированной иллюстрацией. Иллюстрации есть в двух вариантах — для тёмной и светлой темы.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../assets/screens/empty-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="../assets/screens/empty-light.png">
-  <img src="../assets/screens/empty-dark.png" alt="Пустые состояния: нет треков, нет материалов" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/screens/empty-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/screens/empty-light.png">
+  <img src="assets/screens/empty-dark.png" alt="Пустые состояния: нет треков, нет материалов" width="100%">
 </picture>
 
 | Страница            | Когда показывается                              | Где                                |
@@ -129,9 +129,9 @@ Unbounded, Manrope и JetBrains Mono подключаются через Fontsou
 ## Страницы ошибок
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="../assets/screens/errors-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="../assets/screens/errors-light.png">
-  <img src="../assets/screens/errors-dark.png" alt="Страницы ошибок 404, 403, 500, 503" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/screens/errors-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/screens/errors-light.png">
+  <img src="assets/screens/errors-dark.png" alt="Страницы ошибок 404, 403, 500, 503" width="100%">
 </picture>
 
 | Адрес                | Ошибка               | Иллюстрация                                    |

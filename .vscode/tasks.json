@@ -10,20 +10,78 @@
         "-e",
         "require('fs').existsSync('node_modules') || require('child_process').execSync('npm install', { stdio: 'inherit' })"
       ],
-      "presentation": { "reveal": "silent" },
+      "presentation": {
+        "reveal": "silent"
+      },
       "problemMatcher": []
     },
-    { "label": "install", "type": "npm", "script": "install", "problemMatcher": [] },
-    { "label": "dev", "type": "npm", "script": "dev", "isBackground": true, "problemMatcher": [] },
+    {
+      "label": "install",
+      "type": "npm",
+      "script": "install",
+      "problemMatcher": []
+    },
+    {
+      "label": "dev",
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "problemMatcher": []
+    },
     {
       "label": "build",
       "type": "npm",
       "script": "build",
-      "group": { "kind": "build", "isDefault": true },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "problemMatcher": []
     },
-    { "label": "preview", "type": "npm", "script": "preview", "isBackground": true, "problemMatcher": [] },
-    { "label": "check", "type": "npm", "script": "check", "group": "test", "problemMatcher": [] },
-    { "label": "format", "type": "npm", "script": "format", "problemMatcher": [] }
+    {
+      "label": "preview",
+      "type": "npm",
+      "script": "preview",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "check",
+      "type": "npm",
+      "script": "check",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "format",
+      "type": "npm",
+      "script": "format",
+      "problemMatcher": []
+    },
+    {
+      "label": "Deploy: архив для хостинга",
+      "type": "npm",
+      "script": "deploy",
+      "problemMatcher": []
+    },
+    {
+      "label": "GitHub: залить изменения",
+      "type": "shell",
+      "command": "npm run push",
+      "options": {
+        "env": {
+          "COMMIT_MESSAGE": "${input:commitMessage}"
+        }
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "commitMessage",
+      "type": "promptString",
+      "description": "Что изменилось — текст коммита для GitHub",
+      "default": "Обновление сайта"
+    }
   ]
 }

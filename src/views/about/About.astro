@@ -3,7 +3,7 @@
 import Base from '../../layouts/Base.astro';
 import Logo from '../../components/ui/Logo.astro';
 import { site, socialsFor } from '../../site.config';
-import { localize, useT, type Lang } from '../../lib/lang';
+import { localize, useT, type Lang, type UiKey } from '../../lib/lang';
 
 interface Props {
   lang: Lang;
@@ -15,32 +15,21 @@ const socials = socialsFor(lang);
 // Биография — несколько абзацев: в languages/ они разделены пустой строкой (\n\n).
 const bio = t('about.bio').split('\n\n');
 
-const doing = [
-  { title: t('about.music'), text: t('about.musicText'), short: t('about.musicShort') },
-  { title: t('about.voice'), text: t('about.voiceText'), short: t('about.voiceShort') },
-  { title: t('about.animation'), text: t('about.animationText'), short: t('about.animationShort') },
-  { title: t('about.video'), text: t('about.videoText'), short: t('about.videoShort') },
-  { title: t('about.games'), text: t('about.gamesText'), short: t('about.gamesShort') },
-  { title: t('about.translation'), text: t('about.translationText'), short: t('about.translationShort') },
-  { title: t('about.code'), text: t('about.codeText'), short: t('about.codeShort') },
-  { title: t('about.label'), text: t('about.labelText'), short: t('about.labelShort') },
-];
+// Карточки «Чем занимаюсь»: какие и в каком порядке — contents_user/profile/site.json → about.cards.
+const doing = site.about.cards.map((id) => ({
+  title: t(`about.${id}`),
+  text: t(`about.${id}Text`),
+  short: t(`about.${id}Short`),
+}));
 
-// Опыт по годам: тексты — ключи about.exp1…exp11 (languages/); последний пункт — в планах («Скоро»).
-// href — заголовок пункта становится ссылкой.
-const experience = [
-  { year: '2011', title: t('about.exp1'), text: t('about.exp1Text') },
-  { year: '2016', title: t('about.exp2'), text: t('about.exp2Text') },
-  { year: '2018', title: t('about.exp3'), text: t('about.exp3Text') },
-  { year: '2019', title: t('about.exp4'), text: t('about.exp4Text') },
-  { year: '2020', title: t('about.exp5'), text: t('about.exp5Text') },
-  { year: '2021', title: t('about.exp6'), text: t('about.exp6Text') },
-  { year: '2022', title: t('about.exp7'), text: t('about.exp7Text') },
-  { year: '2023', title: t('about.exp8'), text: t('about.exp8Text') },
-  { year: '2024', title: t('about.exp9'), text: t('about.exp9Text'), href: 'https://vk.ru/goliathchild' },
-  { year: '2026', title: t('about.exp10'), text: t('about.exp10Text') },
-  { year: t('about.year'), title: t('about.exp11'), text: t('about.exp11Text') },
-];
+// «Опыт»: годы и ссылки — site.json → about.timeline (до 12 пунктов), тексты — ключи about.exp1, about.exp1Text, …
+// soon: true — пункт в планах («Скоро»); href — заголовок пункта становится ссылкой.
+const experience = site.about.timeline.slice(0, 12).map((item, i) => ({
+  year: item.soon ? t('about.year') : (item.year ?? ''),
+  title: t(`about.exp${i + 1}` as UiKey),
+  text: t(`about.exp${i + 1}Text` as UiKey),
+  href: item.href,
+}));
 const email = site.email || '[email]';
 ---
 
@@ -48,7 +37,7 @@ const email = site.email || '[email]';
   <section class="container hero">
     <div class="hero-text">
       <div class="eyebrow">{t('nav.bio')}</div>
-      <h1 class="logo-name hero-name">Arkomiko</h1>
+      <h1 class="logo-name hero-name">{site.name}</h1>
       <p class="lead desktop-only">{t('about.lead')}</p>
       <p class="lead mobile-only">{t('about.leadShort')}</p>
       <div class="bio desktop-only">

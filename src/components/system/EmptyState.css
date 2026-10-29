@@ -27,10 +27,6 @@
 .signed {
   font-weight: 500;
 }
-.signed .logo-name {
-  font-size: 1.3em;
-  color: var(--text);
-}
 @media (max-width: 767px) {
   .empty {
     gap: 14px;

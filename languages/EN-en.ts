@@ -10,7 +10,7 @@ export default {
   nameEn: 'English',
   ui: {
     'site.description':
-      'Music by Arkomiko: releases, tech demos, covers and sample packs — with a player and licenses.',
+      'Music by {name}: releases, tech demos, covers and sample packs — with a player and licenses.',
 
     'nav.homePage': 'Home',
     'nav.music': 'Music',
@@ -19,7 +19,7 @@ export default {
     'nav.licenses': 'Licenses',
     'nav.contacts': 'Contacts',
     'nav.main': 'Main menu',
-    'nav.home': 'Arkomiko — home',
+    'nav.home': '{name} — home',
     'lang.label': 'Site language',
     'lang.current': 'Site language: English',
     'theme.toLight': 'Switch to light theme',
@@ -29,17 +29,12 @@ export default {
     'search.label': 'Search',
     'search.placeholder': 'Title, genre or tag',
     'search.empty': 'Nothing found',
-    'logo.alt': 'Arkomiko logo',
+    'logo.alt': '{name} logo',
 
     'footer.credit': 'Works on Astro and Vue. Built on the',
     'footer.creditLink': 'Arkomiko repo',
 
     'home.eyebrow': 'About',
-    'home.lead': 'Just a creative person.',
-    'home.text':
-      'Many people have trouble with social networks and platforms these days, so I keep all my music in one place — here: releases, demos, covers and sample packs. Every release says how you can use it — in streams, videos and your own projects.',
-    'home.textShort':
-      'All my music in one place: releases, demos, covers and sample packs. Every release says how you can use it.',
     'home.more': 'More...',
     'home.library': 'To the library',
     'home.latest': 'Latest releases',
@@ -131,80 +126,10 @@ export default {
     'player.upNext': 'Up next',
     'player.license': 'License',
 
-    'about.lead':
-      'Ohayo! I’m Arkomiko (or Ariko), just a creative person. I make music from aggressive dubstep to calm ambient, and I also do voice work, edit videos, model in 3D, code and make games.',
-    'about.leadShort':
-      'Ohayo! I’m Arkomiko — just a creative person. Music from dubstep to ambient and a lot around it.',
-    'about.bio':
-      'It all started with a simple synthesizer from my grandfather. In 2016 came FL Studio and the first remixes — of Alan Walker and Virtual Riot, and in 2018 the first original track and the name Arkomiko: it grew out of the Japanese reading of the name Ahri and the ending Miko. I learn almost everything on my own, sometimes peeking at tips online.\n\n' +
-      'I make DnB, Color Bass, Future Bass, Riddim, Cinematic, Melodic Dubstep, Dubstep, Hybrid Trap, Trap, Glitch Pop, Granular Dubstep, Brostep and Ambient. The sound is either emotional instrumentals or looped resampling: crystal harmony under a glitch. Games and Monstercat and NCS artists have some influence, and the dream is to release on one of those labels someday. For now — practice.\n\n' +
-      'I mix in FL Studio, even though it is not the most convenient for dubstep. I’m learning Ableton for its built-in instruments and tidy projects, but the FL piano roll still holds me. The dream is my own plugin or even my own DAW. Gear path: Behringer UMC202HD → Focusrite Scarlett Solo 3rd Gen at home and Arturia MiniFuse 2 on the go; Nektar SE49 → Arturia KeyLab Essential 49 mk3; AKG K52 → Sennheiser HD 569 → beyerdynamic DT 990 PRO.\n\n' +
-      'There were collaborations with vincienty, Randin Lonescu and Inriven. The goal is to bring my skills to a decent level. And I just want to leave something behind: maybe someone will like it and add this music to their library. Or maybe someone will just walk by. Tea and oatmeal cookies for everyone!',
-    'about.bioShort':
-      'A synthesizer from my grandfather, remixes in 2016, the first original track in 2018. I make everything from DnB and Future Bass to dubstep and ambient and learn almost everything on my own. The dream is a release on NCS or Monstercat; for now — practice. Tea and oatmeal cookies for everyone!',
     'about.doing': 'What I do',
-    'about.music': 'Music',
-    'about.musicText':
-      'Electronic music from aggressive dubstep to calm ambient: releases, demos, covers and sample packs. On YouTube — the Arkomiko Music channel, on platforms — just Arkomiko.',
-    'about.musicShort': 'From dubstep to ambient: releases, demos, covers, sample packs.',
-    'about.voice': 'Voice and sound',
-    'about.voiceText':
-      'Anime fandub voice acting, recording and mixing voice. Lead sound engineer of the SNA Media team.',
-    'about.voiceShort': 'Fandub, voice recording and mixing, SNA Media.',
-    'about.animation': '3D animation',
-    'about.animationText': 'Modelling and animation in Cinema 4D: models, scenes and visuals for videos.',
-    'about.animationShort': 'Modelling and animation in Cinema 4D.',
-    'about.video': 'Video editing',
-    'about.videoText':
-      'Entertainment editing in Premiere and After Effects: game clips and let’s plays on Arkomiko Game, streams and stream clips on Arkomiko Live and Twitch.',
-    'about.videoShort': 'Let’s plays, clips and streams: Arkomiko Game and Live.',
-    'about.games': 'Games and mods',
-    'about.gamesText':
-      'Sola Creators — a joint indie game studio. Nothing finished to show yet, but three games are on the way. And mods, too.',
-    'about.gamesShort': 'Sola Creators: three games on the way. And mods.',
-    'about.translation': 'Translation',
-    'about.translationText': 'Translation and localization of texts, videos, games and mods.',
-    'about.translationShort': 'Translation and localization.',
-    'about.code': 'Programming',
-    'about.codeText':
-      'Websites — like this one, on Astro and Vue, — tools and mods. The dream is my own plugin or DAW.',
-    'about.codeShort': 'Websites, tools and mods.',
-    'about.label': 'Kitsuriko Studio',
-    'about.labelText':
-      'A label and a studio for bringing creative ideas to life: music videos, ads, social videos and animation — our own ideas and others’. There is already a channel, a logo, a merch concept and a couple of unreleased animation projects. We are looking for musicians, artists, photographers and videographers, fashion designers and graffiti artists.',
-    'about.labelShort': 'A label and a creative studio. Looking for people to join.',
     'about.experience': 'Experience',
-    'about.experienceText': 'The path in music and around it — from the first synthesizer to my own website.',
-    'about.exp1': 'The first synthesizer',
-    'about.exp1Text': 'A gift from my grandfather — a simple synthesizer where it all began.',
-    'about.exp2': 'First steps in FL Studio',
-    'about.exp2Text': 'Practice on remixes: the first was an unofficial remix of Alan Walker — Faded.',
-    'about.exp3': 'The first original track and the name Arkomiko',
-    'about.exp3Text':
-      'The first track of my own and a stage name — from the Japanese reading of the name Ahri and the ending Miko.',
-    'about.exp4': 'Music for games',
-    'about.exp4Text': 'The first tracks written specifically for games.',
-    'about.exp5': 'Fandub and sound engineering',
-    'about.exp5Text':
-      'Unofficial voice-over for some anime episodes in a fandub and the first work as a sound engineer.',
-    'about.exp6': 'SNA Media',
-    'about.exp6Text':
-      'Co-founding the SNA Media team as its lead sound engineer. The Arkomiko Music YouTube channel appeared the same year.',
-    'about.exp7': 'First release — The Split Outlook',
-    'about.exp7Text':
-      'The first official distribution: the single came out on Spotify, Apple Music, Yandex Music, VK and more.',
-    'about.exp8': 'LDJAM',
-    'about.exp8Text': 'Taking part in a visual novel contest as a musician.',
-    'about.exp9': 'GoliathChild soundtrack',
-    'about.exp9Text': 'Music for the game GoliathChild.',
-    'about.exp10': 'My own website',
-    'about.exp10Text': 'All the music in one place — with a player and licenses. The code is open on GitHub.',
-    'about.exp11': 'Kitsuriko, Sola Creators and more',
-    'about.exp11Text': 'The Kitsuriko label, Sola Creators games and much more.',
     'about.year': 'Soon',
     'about.contacts': 'Contacts',
-    'about.contactsText':
-      'Write about collaborations, licenses and commissions — music, programming, 3D modelling, localization and mods:',
 
     'samples.eyebrow': 'Materials',
     'samples.title': 'Materials',
@@ -256,11 +181,11 @@ export default {
     'licenses.eyebrow': 'Licenses',
     'licenses.title': 'How to use the music',
     'licenses.lead':
-      'Arkomiko’s music can be used in streams, videos and podcasts — free, with credit. The terms depend on whether it is a release, a demo or a label track.',
+      '{name}’s music can be used in streams, videos and podcasts — free, with credit. The terms depend on whether it is a release, a demo or a label track.',
     'licenses.text':
       'Remixes need approval; games, apps and ads need a separate agreement. Samples, presets and projects use the Free, Standard and Extended licenses. Full license texts are in the project repository.',
     'licenses.musicTitle': 'Music',
-    'licenses.music.name': 'Arkomiko Music License',
+    'licenses.music.name': '{name} Music License',
     'licenses.music.price': 'Free, with credit',
     'licenses.music.text':
       'Releases outside labels: streams, videos (including monetized) and podcasts. Remixes and covers need approval.',
@@ -296,7 +221,7 @@ export default {
     'licenses.withCredit': 'Credit pack and file',
     'licenses.demoTitle': 'When a demo becomes a release',
     'licenses.demo1':
-      'The release is a separate recording: it follows the label’s terms or the Arkomiko Music License, not CC.',
+      'The release is a separate recording: it follows the label’s terms or the {name} Music License, not CC.',
     'licenses.demo2': 'Once the release is out, the demo is removed from the site.',
     'licenses.demo3':
       'The CC license is irrevocable: anyone who already got the demo keeps their rights to it, including remixes made before the release.',
@@ -306,7 +231,7 @@ export default {
     'licenses.free': 'Free',
     'licenses.freePrice': 'Free',
     'licenses.freeText':
-      'Royalty-free in your own music. In your own packs, paid ones too, with credit “Arkomiko - Pack - File”. Synchronization and DAW projects — with royalties.',
+      'Royalty-free in your own music. In your own packs, paid ones too, with credit “{name} - Pack - File”. Synchronization and DAW projects — with royalties.',
     'licenses.standard': 'Standard',
     'licenses.standardPrice': 'Boosty or Patreon subscription, or a Ko-fi purchase',
     'licenses.standardText':
@@ -327,15 +252,13 @@ export default {
     'licenses.p.eula': 'Per project EULA',
     'licenses.credit': 'Credit',
     'licenses.creditText':
-      'TASL format: title, author, source, license. Where: video description, credits or a pinned comment. Short form — Music: Arkomiko — Title.',
-    'licenses.creditLine':
-      '"Track title" — Arkomiko\narkomiko.music/release/track-title\nArkomiko Music License',
+      'TASL format: title, author, source, license. Where: video description, credits or a pinned comment. Short form — Music: {name} — Title.',
+    'licenses.creditLine': '"Track title" — {name}\n{domain}/release/track-title\n{name} Music License',
     'licenses.copy': 'Copy',
     'licenses.copied': 'Copied',
     'licenses.faq': 'Questions',
     'licenses.q1': 'My video got a Content ID claim. What should I do?',
-    'licenses.a1':
-      'Email Arkomiko.Music@gmail.com or arikomika@gmail.com with a link to the video — the claim will be released.',
+    'licenses.a1': 'Email {licenseEmail} with a link to the video — the claim will be released.',
     'licenses.q2': 'Can I make a remix or a cover?',
     'licenses.a2':
       'For releases — by approval: write to the author and get signed permission before publishing. The remix belongs to you. Demos can be adapted non-commercially under CC BY-NC-SA 4.0.',

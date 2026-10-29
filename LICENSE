@@ -17,7 +17,7 @@ in case of discrepancies the Russian version prevails.
 «Код» — исходный код этого репозитория: файлы в src/, .vscode/, .github/
 и файлы конфигурации в корне репозитория, за исключением Материалов автора.
 
-«Материалы автора» — всё, что перечислено в файле NOTICE.md как не входящее
+«Материалы автора» — всё, что перечислено в файле GiDo/RU-ru/NOTICE.md как не входящее
 в эту лицензию: имя и псевдоним Arkomiko, логотип, маскот, иллюстрации,
 иконки вкладки, шаблонные обложки, графика документации, музыка, обложки
 релизов, тексты и иной контент из папки contents_user/.
@@ -44,7 +44,7 @@ in case of discrepancies the Russian version prevails.
 3. ОБЯЗАТЕЛЬНЫЕ УСЛОВИЯ
 
   а) Во всех копиях Кода и Производных работ сохраняются этот файл LICENSE
-     и файл NOTICE.md. Строку copyright Автора удалять и изменять нельзя;
+     и файл GiDo/RU-ru/NOTICE.md. Строку copyright Автора удалять и изменять нельзя;
      свою строку copyright можно добавить ниже.
 
   б) На каждой странице опубликованного Своего проекта, в подвале,
@@ -55,7 +55,7 @@ in case of discrepancies the Russian version prevails.
      Размер и оформление подписи — на усмотрение, но она должна быть читаемой.
 
   в) До публикации Своего проекта все Материалы автора заменяются своими.
-     Перечень — в NOTICE.md и Git-And-Docks/RU-ru/USAGE.md.
+     Перечень — в GiDo/RU-ru/NOTICE.md и GiDo/RU-ru/USAGE.md.
 
 4. ЧТО ЗАПРЕЩЕНО
 
@@ -65,7 +65,7 @@ in case of discrepancies the Russian version prevails.
      настройки или поддержки сайтов на заказ, хостинга, маркетплейсов шаблонов.
   в) Использовать Код в проектах организаций (лейблов, студий, компаний)
      без письменного разрешения Автора.
-  г) Использовать Материалы автора иначе, чем разрешено в NOTICE.md.
+  г) Использовать Материалы автора иначе, чем разрешено в GiDo/RU-ru/NOTICE.md.
   д) Выдавать Свой проект за проект Arkomiko или создавать впечатление,
      что он связан с Автором или одобрен им.
 
@@ -111,7 +111,7 @@ ENGLISH VERSION (translation)
 .github/ and configuration files in the repository root, excluding the
 Author's Materials.
 
-"Author's Materials" means everything listed in NOTICE.md as not covered by
+"Author's Materials" means everything listed in GiDo/RU-ru/NOTICE.md as not covered by
 this license: the name and pseudonym Arkomiko, the logo, the mascot,
 illustrations, favicons, placeholder covers, documentation graphics, music,
 release artwork, texts and any other content in the contents_user/ folder.
@@ -138,7 +138,7 @@ of copyright to:
 3. CONDITIONS
 
   a) All copies of the Code and Derivative Works must keep this LICENSE file
-     and the NOTICE.md file. The Author's copyright line must not be removed
+     and the GiDo/RU-ru/NOTICE.md file. The Author's copyright line must not be removed
      or changed; you may add your own copyright line below it.
 
   b) Every page of a published Own Project must show, in the footer, a visible
@@ -148,7 +148,7 @@ of copyright to:
      Size and styling are up to you, but the credit must be legible.
 
   c) All Author's Materials must be replaced with your own before an Own
-     Project is published. See NOTICE.md and Git-And-Docks/RU-ru/USAGE.md.
+     Project is published. See GiDo/RU-ru/NOTICE.md and GiDo/RU-ru/USAGE.md.
 
 4. RESTRICTIONS
 
@@ -158,7 +158,7 @@ of copyright to:
      configuring or maintaining websites to order, hosting, template marketplaces.
   c) You may not use the Code in projects of organizations (labels, studios,
      companies) without the Author's written permission.
-  d) You may not use the Author's Materials except as permitted in NOTICE.md.
+  d) You may not use the Author's Materials except as permitted in GiDo/RU-ru/NOTICE.md.
   e) You may not present your Own Project as a project of Arkomiko or imply
      that it is affiliated with or endorsed by the Author.
 

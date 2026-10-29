@@ -1,7 +1,10 @@
 // Языки сайта. Шаблон с ключами и подсказками — src/i18n.ts, переводы — languages/*.ts (по файлу на язык).
 // Новый язык = новый файл в languages/: сайт сам добавит его в переключатель и соберёт страницы /<код>/….
 // Нет перевода ключа — показывается подсказка из шаблона в [квадратных скобках].
+// Личные тексты (главная, «Биография») — contents_user/profile/languages/<тот же файл>.ts: они перекрывают словарь
+// и в git не попадают. {name}, {domain}, {email}, {licenseEmail} в любом тексте берутся из профиля.
 import template, { type UiKey } from '../i18n';
+import { site } from '../site.config';
 import { defaultLang, localize } from './locale';
 
 export { defaultLang, localize };
@@ -25,8 +28,23 @@ export type Language = {
   ui: Partial<Record<UiKey, string>>;
 };
 
+/** Личные тексты из профиля: те же ключи, что в словаре. */
+export type ProfileTexts = Partial<Record<UiKey, string>>;
+
 const files = import.meta.glob<{ default: Language }>('/languages/*.ts', { eager: true });
-const all = Object.values(files).map((f) => f.default);
+const profileFiles = import.meta.glob<{ default: ProfileTexts }>('/contents_user/profile/languages/*.ts', {
+  eager: true,
+});
+const fileName = (path: string) => path.split('/').pop();
+const profileTexts = new Map(Object.entries(profileFiles).map(([path, f]) => [fileName(path), f.default]));
+// Сборка для хостинга (npm run deploy) публикует только языки, лежащие в git: список файлов передаёт deploy.mjs.
+const only = process.env.SITE_LANG_FILES?.split(',');
+const all = Object.entries(files)
+  .filter(([path]) => !only || only.includes(fileName(path) ?? ''))
+  .map(([path, f]) => ({
+    ...f.default,
+    ui: { ...f.default.ui, ...profileTexts.get(fileName(path)) },
+  }));
 
 if (!all.some((l) => l.code === defaultLang))
   throw new Error(`languages/: нет файла основного языка «${defaultLang}»`);
@@ -56,9 +74,13 @@ export function langInfo(lang: Lang): Language {
 
 const keys = Object.keys(template) as UiKey[];
 
-/** Текст элемента: перевод или подсказка из шаблона. */
+/** Текст элемента: перевод или подсказка из шаблона; {name} и {domain} — из профиля. */
 function text(lang: Lang, key: UiKey): string {
-  return langInfo(lang).ui[key] || template[key];
+  return (langInfo(lang).ui[key] || template[key])
+    .replaceAll('{name}', site.name)
+    .replaceAll('{domain}', site.domain)
+    .replaceAll('{email}', site.email || '[email]')
+    .replaceAll('{licenseEmail}', site.licenseEmail || site.email || '[email]');
 }
 
 /** t('count.Semples.few', { n: 24 }) → «24 сэмпла» */

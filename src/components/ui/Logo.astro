@@ -7,6 +7,7 @@
 //            когда логотип виден. Телефон (логотип скрыт) и «уменьшение движения» — без подгрузки.
 import rotateSvg from '../../assets/logo/logo-rotate.svg?raw';
 import rotateUrl from '../../assets/logo/logo-rotate.svg?url&no-inline';
+import { site } from '../../site.config';
 
 interface Props {
   variant?: 'mark' | 'line' | 'rotate';
@@ -14,7 +15,7 @@ interface Props {
   label?: string;
   class?: string;
 }
-const { variant = 'mark', size = 42, label = 'Arkomiko', class: className } = Astro.props;
+const { variant = 'mark', size = 42, label = site.name, class: className } = Astro.props;
 
 // Геометрия неподвижного логотипа (mark, line): семь граней и глаза.
 const facets = [

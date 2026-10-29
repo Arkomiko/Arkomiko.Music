@@ -6,6 +6,7 @@ import ReleaseGrid from '../../components/catalog/ReleaseGrid.astro';
 import TrackTable from '../../components/player/TrackTable.vue';
 import EmptyState from '../../components/system/EmptyState.astro';
 import { getCatalog, getLibrary, getPacks } from '../../lib/media';
+import { site } from '../../site.config';
 import { clientKeys, localize, strings, useT, type Lang } from '../../lib/lang';
 
 interface Props {
@@ -23,7 +24,7 @@ const library = await getLibrary();
   <section id="about" class="container hero">
     <div class="hero-text">
       <div class="eyebrow">{t('home.eyebrow')}</div>
-      <h1 class="logo-name hero-name">Arkomiko</h1>
+      <h1 class="logo-name hero-name">{site.name}</h1>
       <p class="lead">{t('home.lead')}</p>
       <p class="text-soft desktop-only">{t('home.text')}</p>
       <p class="text-soft mobile-only">{t('home.textShort')}</p>

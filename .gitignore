@@ -1,5 +1,7 @@
 node_modules/
 dist/
+# Архивы сборки для загрузки на хостинг.
+deploy/
 .astro/
 .DS_Store
 
@@ -7,6 +9,10 @@ dist/
 # Шаблоны релизов (.template-content) публикуются: сайт их не читает.
 contents_user/traks/*
 !contents_user/traks/.template-content/
+
+# Личный профиль: имя, домен, почта, соцсети, тексты главной и «Биографии». Образец — profile/.template-content/.
+contents_user/profile/*
+!contents_user/profile/.template-content/
 
 # Переводы публикуются, когда готовы: пока в репозитории только русский и английский.
 # Заготовки остальных языков лежат локально; готовый язык — добавить сюда строку-исключение.

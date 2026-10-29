@@ -1,15 +1,20 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "files.eol": "\n",
+  "files.encoding": "utf8",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
   "[astro]": { "editor.defaultFormatter": "astro-build.astro-vscode" },
   "prettier.documentSelectors": ["**/*.astro"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.exclude": { "**/.astro": true, "**/dist": true },
-  "search.exclude": { "**/node_modules": true, "**/dist": true, "**/.astro": true },
+  "search.exclude": { "**/node_modules": true, "**/dist": true, "**/.astro": true, "**/deploy": true },
   "files.associations": { "release.md": "markdown" },
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
-    "package.json": "package-lock.json, .nvmrc, .prettierrc, .editorconfig",
-    "README.md": "LICENSE, NOTICE.md"
+    "package.json": "package-lock.json, tsconfig.json, astro.config.mjs, .gitignore, LICENSE"
   }
 }

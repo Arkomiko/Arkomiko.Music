@@ -7,7 +7,8 @@ import { z } from 'astro/zod';
 //   traks/DR/<папка>/release.md    — черновики
 //   pack/<Semples|Presets|Projects|Collection>/<папка>/pack.md — материалы
 //   licenses/*.md                  — тексты лицензий
-// Имя папки = адрес страницы: traks/RLS/4wio → /release/4wio
+// Имя папки = адрес страницы: traks/RLS/4wio → /release/4wio. Поле slug в release.md задаёт адрес вручную
+// (по умолчанию папка RLS0001 → /release/RLS0001, как каталожные номера у Monstercat).
 
 const idFromFolder = ({ entry }: { entry: string }) => entry.split('/')[0];
 
@@ -20,6 +21,10 @@ const placeholder = z.number().int().positive().optional();
 
 const track = {
   title: z.string(),
+  slug: z
+    .string()
+    .regex(/^[a-z0-9-]+$/, 'адрес: латиница в нижнем регистре, цифры и дефис')
+    .optional(), // адрес страницы /release/<slug>; без него — имя папки
   // Можно указать только год (date: 2022) или полную дату (date: 2026-03-14).
   date: z.union([z.number().int(), z.coerce.date()]),
   kind: z.enum(['single', 'album', 'ep', 'cover', 'techno-demo']),

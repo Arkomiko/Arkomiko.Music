@@ -1,0 +1,41 @@
+# Настройки Apache для обычного хостинга (например, SpaceWeb). Cloudflare Pages этот файл не читает.
+
+# Страницы ошибок сайта вместо стандартных страниц сервера.
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+ErrorDocument 403 /403/index.html
+ErrorDocument 503 /503/index.html
+
+# Переход на HTTPS. Включать ТОЛЬКО после выпуска SSL-сертификата для домена: убрать «# » в начале пяти строк ниже.
+# Сервер хостинга стоит за nginx, поэтому протокол берётся из X-Forwarded-Proto (рецепт из справки SpaceWeb).
+# RewriteEngine on
+# SetEnvIf X-Forwarded-Proto https SERVER_PORT=443
+# SetEnvIf X-Forwarded-Proto https HTTPS=on
+# RewriteCond %{HTTP:HTTPS} !=on [NC]
+# RewriteRule ^(.*)$ https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
+
+# Типы файлов, которых может не быть в настройках сервера.
+<IfModule mod_mime.c>
+  AddType video/webm .webm
+  AddType font/woff2 .woff2
+  AddType image/svg+xml .svg
+  AddType image/webp .webp
+  AddType image/avif .avif
+  AddType audio/mpeg .mp3
+</IfModule>
+
+# Сжатие текста (если сервер не сжимает сам).
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# Кэш: файлы с хешем в имени (/_astro/имя.хеш.css) не меняются — браузер хранит их год;
+# страницы проверяет при каждом заходе, чтобы обновления сайта были видны сразу.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.[A-Za-z0-9_-]{8,}\.(css|js|woff2?|webp|avif|png|jpe?g|svg|mp3|webm)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>

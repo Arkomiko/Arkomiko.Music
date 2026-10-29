@@ -1,0 +1,16 @@
+{
+  "name": "Artist",
+  "url": "https://example.com",
+  "email": "hello@example.com",
+  "licenseEmail": "",
+  "socials": [
+    { "label": "YouTube", "url": "https://www.youtube.com/@example" },
+    { "label": "Telegram", "url": "" },
+    { "label": "SoundCloud", "url": "" },
+    { "label": "Yandex Music", "labelRu": "Яндекс Музыка", "url": "" }
+  ],
+  "about": {
+    "cards": ["music", "video", "code", "label"],
+    "timeline": [{ "year": "2020" }, { "year": "2022" }, { "year": "2024" }, { "soon": true }]
+  }
+}

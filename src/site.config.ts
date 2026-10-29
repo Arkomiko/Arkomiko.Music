@@ -1,4 +1,6 @@
-// Главные настройки сайта. Всё, что про тебя, а не про конкретный релиз, — здесь.
+// Настройки сайта. Всё личное — имя, домен, почта, соцсети, состав «Биографии» — лежит в
+// contents_user/profile/site.json (в git не попадает; образец — contents_user/profile/.template-content/site.json).
+// Здесь — значения шаблона на случай, если профиля нет.
 
 export type Permission = 'allowed' | 'conditions' | 'forbidden';
 export type ReleaseLicense = {
@@ -7,41 +9,54 @@ export type ReleaseLicense = {
   streams: Permission;
   monetization: Permission;
   remixes: Permission;
-  credit?: string; // без значения: «Music: Arkomiko — Название трека»
+  credit?: string; // без значения: «Music: <имя> — Название трека»
 };
 export type Social = { label: string; labelRu?: string; url: string };
+/** Пункт ленты «Опыт»: год или «Скоро» (soon); href — заголовок пункта станет ссылкой. */
+export type TimelineItem = { year?: string; soon?: boolean; href?: string };
+/** Карточки «Чем занимаюсь»: тексты — ключи about.<id>, about.<id>Text, about.<id>Short. */
+export type CardId = 'music' | 'voice' | 'animation' | 'video' | 'games' | 'translation' | 'code' | 'label';
+
+type Profile = {
+  name: string;
+  url: string;
+  email: string;
+  licenseEmail: string;
+  socials: Social[];
+  about: { cards: CardId[]; timeline: TimelineItem[] };
+};
+
+const defaults: Profile = {
+  name: 'Artist',
+  url: 'https://example.com',
+  email: '', // пусто — на сайте будет заглушка [email]
+  licenseEmail: '',
+  socials: [],
+  about: {
+    cards: ['music', 'video', 'code', 'label'],
+    timeline: [{ year: '2020' }, { year: '2022' }, { year: '2024' }, { soon: true }],
+  },
+};
+
+const profileFile = import.meta.glob<Partial<Profile>>('/contents_user/profile/site.json', {
+  eager: true,
+  import: 'default',
+});
+const profile: Partial<Profile> = Object.values(profileFile)[0] ?? {};
 
 export const site = {
-  name: 'Arkomiko',
-  url: 'https://arkomiko.music',
-  email: 'Arikomika@gmail.com', // пусто — на сайте будет заглушка [email]
-
-  // Соцсети: подвал и страница «Об авторе», в этом порядке. Без адреса — на сайте не показывается.
-  // labelRu — подпись на русской версии, если отличается.
-  socials: [
-    { label: 'YouTube', url: 'https://www.youtube.com/@arkomiko_music' },
-    { label: 'Telegram', url: 'https://t.me/arkomiko_gr' },
-    { label: 'SoundCloud', url: 'https://soundcloud.com/arkomiko' },
-    { label: 'Spotify', url: 'https://open.spotify.com/artist/1w1dJBEE10sU9oUVpZCuFp' },
-    { label: 'Apple Music', url: 'https://music.apple.com/artist/arkomiko/1626844426' },
-    { label: 'Yandex Music', labelRu: 'Яндекс Музыка', url: 'https://music.yandex.ru/artist/16784654' },
-    { label: 'Reddit', url: 'https://www.reddit.com/user/Arkomiko/' },
-    { label: 'X', url: 'https://x.com/arkomiko21299' },
-    { label: 'VK', url: 'https://vk.com/arkomiko_news' },
-    { label: 'Twitch', url: 'https://www.twitch.tv/arkomiko' },
-    { label: 'Boosty', url: 'https://boosty.to/arkomiko' },
-    { label: 'Ko-fi', url: 'https://ko-fi.com/arkomiko' },
-  ] as Social[],
-
-  // Почта для лицензий, договоров и претензий Content ID.
-  licenseEmail: 'Arkomiko.Music@gmail.com',
+  ...defaults,
+  ...profile,
+  about: { ...defaults.about, ...profile.about },
+  /** Домен без протокола: arkomiko.net */
+  domain: new URL(profile.url ?? defaults.url).host,
 
   // Лицензии по умолчанию для блока «Лицензия» на странице релиза (полные тексты — contents_user/licenses/).
   // Поле `license` в release.md перекрывает, например для релиза через лейбл.
   licenses: {
     // traks/RLS — релизы вне лейблов
     music: {
-      name: 'Arkomiko Music License',
+      name: `${profile.name ?? defaults.name} Music License`,
       url: '/licenses#music',
       streams: 'allowed',
       monetization: 'allowed',

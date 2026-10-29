@@ -9,7 +9,9 @@
     "preview": "astro preview",
     "serve": "astro build && astro preview",
     "check": "astro check",
-    "format": "prettier --write ."
+    "format": "prettier --write src languages contents_user GiDo .github .vscode astro.config.mjs",
+    "deploy": "node .vscode/tools/deploy.mjs",
+    "push": "node .vscode/tools/push.mjs"
   },
   "dependencies": {
     "@astrojs/vue": "^7.0.3",
@@ -31,5 +33,21 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 110,
+    "endOfLine": "lf",
+    "plugins": [
+      "prettier-plugin-astro"
+    ],
+    "overrides": [
+      {
+        "files": "*.astro",
+        "options": {
+          "parser": "astro"
+        }
+      }
+    ]
   }
 }

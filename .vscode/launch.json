@@ -2,6 +2,23 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Deploy: архив для хостинга",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run deploy",
+      "preLaunchTask": "install (если нужно)"
+    },
+    {
+      "name": "GitHub: залить изменения",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run push",
+      "env": {
+        "COMMIT_MESSAGE": "${input:commitMessage}"
+      },
+      "preLaunchTask": "install (если нужно)"
+    },
+    {
       "name": "Сайт: dev-сервер",
       "type": "node-terminal",
       "request": "launch",
@@ -42,6 +59,14 @@
       "type": "node-terminal",
       "request": "launch",
       "command": "npm run check"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "commitMessage",
+      "type": "promptString",
+      "description": "Что изменилось — текст коммита для GitHub",
+      "default": "Обновление сайта"
     }
   ]
 }

@@ -122,6 +122,11 @@
   flex-direction: column;
   gap: 12px;
 }
+/* Длинные слова других языков переносятся, а не вылезают из колонки. */
+.split-intro .h2 {
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
 .split-intro p {
   font-size: 15px;
   line-height: 1.6;
@@ -185,6 +190,12 @@
   .split,
   .faq-row {
     grid-template-columns: 300px minmax(0, 1fr);
+  }
+}
+/* В колонке 300 px слово «СТАНОВИТСЯ» в 40 px не помещалось (видно при увеличенном масштабе страницы). */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .split-intro .h2 {
+    font-size: 30px;
   }
 }
 @media (max-width: 959px) {

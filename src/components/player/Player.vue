@@ -303,7 +303,9 @@ function updateMediaSession(tr: PlayerTrack) {
 
       <div class="full-titles">
         <div class="full-title">{{ current.title }}</div>
-        <div class="full-sub"><span class="logo-name">Arkomiko</span> · {{ kindLabel }}</div>
+        <div class="full-sub">
+          <span class="logo-name">{{ current.artist }}</span> · {{ kindLabel }}
+        </div>
       </div>
 
       <div class="full-spec">

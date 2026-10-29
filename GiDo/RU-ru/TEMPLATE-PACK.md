@@ -33,12 +33,12 @@
 
 ## Лицензии
 
-| `license`  | Когда                                         | Условия                                   |
-| ---------- | --------------------------------------------- | ----------------------------------------- |
-| `free`     | бесплатные паки                               | [free.md](../../licenses/free.md)         |
-| `standard` | подписка Boosty или Patreon, покупка на Ko-fi | [standard.md](../../licenses/standard.md) |
-| `extended` | покупка с правом синхронизации                | [extended.md](../../licenses/extended.md) |
+| `license`  | Когда                                         | Условия                                                 |
+| ---------- | --------------------------------------------- | ------------------------------------------------------- |
+| `free`     | бесплатные паки                               | [free.md](../../contents_user/licenses/free.md)         |
+| `standard` | подписка Boosty или Patreon, покупка на Ko-fi | [standard.md](../../contents_user/licenses/standard.md) |
+| `extended` | покупка с правом синхронизации                | [extended.md](../../contents_user/licenses/extended.md) |
 
 Без поля `license` бесплатный пак получает Free, платный — Standard.
 
-Все поля — в [CONTENT.md](../../../Git-And-Docks/RU-ru/CONTENT.md).
+Все поля — в [CONTENT.md](CONTENT.md).

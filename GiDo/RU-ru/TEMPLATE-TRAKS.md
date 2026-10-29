@@ -34,6 +34,6 @@
 | `kind: techno-demo` или папка `DR/` | CC BY-NC-SA 4.0        |
 | всё остальное                       | Arkomiko Music License |
 
-Поле `license` в `release.md` перекрывает значения по умолчанию: можно поменять одно поле или все. Тексты лицензий — в [`../../licenses/`](../../licenses/).
+Поле `license` в `release.md` перекрывает значения по умолчанию: можно поменять одно поле или все. Тексты лицензий — в [`../../licenses/`](../../contents_user/licenses/).
 
-Все поля и значения — в [CONTENT.md](../../../Git-And-Docks/RU-ru/CONTENT.md).
+Все поля и значения — в [CONTENT.md](CONTENT.md).

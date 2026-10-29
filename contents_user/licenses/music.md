@@ -48,7 +48,7 @@ Copyright (c) Arkomiko. Русская версия является основ�
 Формат TASL: название, автор, источник, лицензия.
 
 ```
-«4WIO» — Arkomiko — arkomiko.music/release/4wio — Arkomiko Music License
+«4WIO» — Arkomiko — arkomiko.net/release/4wio — Arkomiko Music License
 ```
 
 Короткий вариант, если места мало: `Music: Arkomiko — 4WIO`.
@@ -91,7 +91,7 @@ materials such as samples, presets, projects and collections (Free, Standard and
    any other commercial use; exclusive rights.
 4. **Prohibited:** releasing the track or parts of it under your name, uploading it to streaming services, selling it;
    registering it in Content ID or similar systems; removing or changing the credit; unlawful use.
-5. **Credit (TASL):** `"4WIO" — Arkomiko — arkomiko.music/release/4wio — Arkomiko Music License`;
+5. **Credit (TASL):** `"4WIO" — Arkomiko — arkomiko.net/release/4wio — Arkomiko Music License`;
    short form `Music: Arkomiko — 4WIO`; in the video description, credits or a pinned comment.
 6. **Content ID claims:** email Arkomiko.Music@gmail.com or arikomika@gmail.com with a link to the video.
 7. **Infringement:** the Author first records the infringement and contacts the infringer; if ignored,
